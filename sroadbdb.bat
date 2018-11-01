@@ -146,4 +146,4 @@ exit /b
 :: SuroADB Comparison Database : [Status] [#vVersion] [Date]
 :: SuroADB Comparison Database : Offline 1v11 92918
 :: SuroADB Comparison Database : Offline 2v11b4 10118
-:: SuroADB Comparison Database : Online 3v121bA 11118
+:: SuroADB Comparison Database : Online 3v121bC 11118
