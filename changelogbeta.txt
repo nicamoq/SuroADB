@@ -52,3 +52,6 @@ ex. Runtime adb devices, Runtime log and directory configurations
 
 :: SuroADB 12.1 11118 848pm (BETA D)
 - fixed "sroadb12w.txt" not being detected by SuroADB 12.1
+
+:: SuroADB 12.1 11218 742am (BETA E)
+- added quotation mark on IF NOT EXIST "%tempdir%\SuroADB" MKDIR "%tempdir%\SuroADB"
