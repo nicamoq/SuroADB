@@ -1,0 +1,51 @@
+SuroADB!Beta
+Suffixes:
+(BETA #) - Beta version in which the additions were tested
+(REL) - Additions that are added in the FINAL version of SuroADB then released
+
+>>:: SuroADB 12 build 101118 1519pm - Beta releases (BETA A)
+- added title cmds on runtime
+- planning to improve apk install and fix its route after finish 
+- improved screenshot and screenrecord ui functions
+
+:: SuroADB 12 build 101218 847pm (BETA B)
+- Planning on making all runtime operations completely silent to optimize SuroADB's first run load (It's slow as f*ck!) 
+ex. Runtime adb devices, Runtime log and directory configurations
+- Planning on making SuroADB file push and pull background threadded that rely on config file variables with it's own customized dedicated window
+- *Also make a dedicated file push interface for screens that rely on config files the same as File push and pull
+- Fixed a few title cmds
+- Minor bug fixes and improvements to runtime
+- Planning on releasing beta versions with their own persistent update check (currently update checks to official stable release)
+- plan to add "in" and "ex" commands for file push and pull, same goes for screenshot and screenrecord <start at op6>
+
+:: SuroADB 12 102718 711pm - (REL)
+- removed some adb install features as they are unstable
+- added some dialogue for apk install such as Copying to "%wdre%\sroadbtemp\SuroADB" ...
+- added dedicated path for apk install's temp
+
+:: SuroADB 12 102818 1013am (REL)
+- Minor tweaks to ui by adding cls function after every input
+- Planning on changing color scheme configuration again to apply directly instead of restarting
+  -done! color setter is now ultra fast and does not require a restart
+  -also fixed error handling
+
+:: SUROADB 12 RELEASED! 101818 (REL)
+- Updated platform-tools to platform-tools_r28.0.1-windows (8/31/2018)
+- Released SuroADB 12 for official release
+
+>>:: SuroADB 12.1
+
+:: SuroADB 12.1 103118 850am (BETA A)
+- planning on adding double quotes on ALL path variables so SuroADB can work with windows machines with spaces in their user name
+- added the tempdir variable that replaces all \sroadbtemp\ paths
+- added double quotes on ALL path variables
+ -now compatible with computers that have spaces in their userprofile name
+- color setter error detection will fix errors then go back to color setter menu
+
+:: SuroADB 12.1 11118 729am (BETA B)
+- Now hosted on GitHub! https://github.com/nicamoq/SuroADB
+- changed download servers to github
+
+:: SuroADB 12.1 11118 716pm (BETA C)
+- fixed APK install menu unable to go back to main bug
+- fixed "cols" and "color" on normal and menu interfacemenu ui
