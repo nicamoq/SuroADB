@@ -82,4 +82,3 @@ IF EXIST "%MYFILES%\sroadbtemp\Update\updatechk.bat" DEL /Q "%MYFILES%\sroadbtem
 ping localhost -n 3 >nul
 cls
 exit
-
