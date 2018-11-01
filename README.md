@@ -24,6 +24,11 @@ a third-party bat-to-exe conversion software to work properly.
 This is the latest SuroADB BETA Release. Updates in unison with the RAW script.
 
 =================================================================================
+<strong>changelogbeta.txt</strong>
+
+Logs of every changes made on a SuroADB Beta script.
+
+=================================================================================
 <strong>sroadbdb.bat (LIVE)</strong>
 
 Latest comparison database that is <strong>always</strong> downloaded by
