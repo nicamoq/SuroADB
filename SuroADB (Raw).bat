@@ -29,7 +29,7 @@ CD %MYFILES%
 IF NOT "%cd%"=="%MYFILES%" goto cderror2
 IF NOT EXIST "%audir%" MKDIR "%audir%"
 IF NOT EXIST "%tempdir%" MKDIR "%tempdir%"
-IF NOT EXIST "%tempdir%\SuroADB" MKDIR %tempdir%\SuroADB"
+IF NOT EXIST "%tempdir%\SuroADB" MKDIR "%tempdir%\SuroADB"
 IF NOT EXIST "%tempdir%\db" MKDIR "%tempdir%\db"
 IF NOT EXIST "%tempdir%\Apk" MKDIR "%tempdir%\Apk"
 IF EXIST "%tempdir%\srodb\sroadbdb.bat" call "%tempdir%\srodb\sroadbdb.bat"
@@ -393,12 +393,11 @@ echo.
 echo.
 pause
 goto conft
-:oldvergen
 
+:oldvergen
 DEL /Q "%MYFILES%\sroadb11w.txt"
 DEL /Q "%MYFILES%\sroadb111w.txt"
 DEL /Q "%MYFILES%\sroadb12w.txt"
-
 title SuroADB %version%
 cls
 echo You've been using SuroADB %localver%. Great!
@@ -425,7 +424,6 @@ cls
 :: This will enable (or disable) logging. Depends on your settings.
 IF EXIST "%audir%\sroadblogs.bat" echo %TIME% %DATE% sroadblogs.bat present >> "%tempdir%\SuroADB\sroadb-runtime.txt"
 IF EXIST "%audir%\sroadblogs.bat" call "%audir%\sroadblogs.bat"
-
 
 :: This automates the cd to the one you set.
 :: MYFILES is the temp folder for suroadb.
