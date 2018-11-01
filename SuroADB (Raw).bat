@@ -1161,8 +1161,7 @@ IF /i %pkginstall%==H goto apkinstallH
 IF /i %pkginstall%==S goto apkinstallS
 IF /i %pkginstall%==R goto apkinstallR
 IF /i %pkginstall%==G goto apkinstallG
-IF /i %pkginstall%==menu goto clsmenu
-IF /i %pkginstall%==MENU goto clsmenu
+IF /i %pkginstall%==M goto clsmenu
 cls
 goto op2
 
@@ -2180,7 +2179,7 @@ cls
 IF EXIST "%audir%\sroadbuic.txt" goto csuroadbm
 echo SuroADB Settings
 echo.
-echo    cols (change color scheme)
+echo    color (change color scheme)
 echo    ui (UI settings)
 echo    def (change things to default)
 echo    config (sdcard directories)
@@ -2200,7 +2199,7 @@ echo.
 set /p srodb= : 
 cls
 IF /i %srodb%==update goto updt
-IF /i %srodb%==cols goto interfacemenu
+IF /i %srodb%==color goto interfacemenu
 IF /i %srodb%==ui goto uisettings
 IF /i %srodb%==def goto defl
 IF /i %srodb%==config goto cfgset
