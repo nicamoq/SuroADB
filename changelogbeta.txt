@@ -49,3 +49,6 @@ ex. Runtime adb devices, Runtime log and directory configurations
 :: SuroADB 12.1 11118 716pm (BETA C)
 - fixed APK install menu unable to go back to main bug
 - fixed "cols" and "color" on normal and menu interfacemenu ui
+
+:: SuroADB 12.1 11118 848pm (BETA D)
+- fixed "sroadb12w.txt" not being detected by SuroADB 12.1
