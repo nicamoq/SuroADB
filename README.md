@@ -13,30 +13,30 @@ Information on files:
 (LIVE) - This means that SuroADB's latest version relies on it. Right now.
 
 =================================================================================
-SuroADB (Raw).bat
+<strong>SuroADB (Raw).bat</strong>
 
 This is the main SuroADB RAW Source Code. Updates frequently and requires
 a third-party bat-to-exe conversion software to work properly.
 
 =================================================================================
-SuroADB.exe
+<strong>SuroADB.exe</strong>
 
 This is the latest SuroADB BETA Release. Updates in unison with the RAW script.
 
 =================================================================================
-sroadbdb.bat (LIVE)
+<strong>sroadbdb.bat (LIVE)</strong>
 
 Latest comparison database that is <strong>always</strong> downloaded by
 SuroADB's update checker. This can help auto correct errors when inputs are made.
 
 =================================================================================
-sroadbupdate (Raw).bat
+<strong>sroadbupdate (Raw).bat</strong>
 
 Latest RAW Source Code of SuroADB's very own update checker. Updates in unison
 with each SuroADB release.
 
 ================================================================================
-updatechk.bat (LIVE)
+<strong>updatechk.bat (LIVE)</strong>
 
 Contains new version information and description. Always downloaded by SuroADB's
 update checker as well.
