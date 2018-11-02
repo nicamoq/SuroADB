@@ -2333,7 +2333,7 @@ DEL /Q "%MYFILES%\mke2fs.exe"
 DEL /Q "%MYFILES%\mke2fs.conf"
 DEL /Q "%MYFILES%\source.properties"
 DEL /Q "%MYFILES%\sqlite3.exe"
-echo B2 Deleting SuroADB resources"
+echo B2 Deleting SuroADB resources
 DEL /Q "%MYFILES%\sroadb%filerawver%w.txt"
 DEL /Q "%MYFILES%\sroadbupdate.exe"
 DEL /Q "%MYFILES%\sroadbupdateui.bat"
