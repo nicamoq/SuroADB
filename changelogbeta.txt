@@ -58,3 +58,13 @@ ex. Runtime adb devices, Runtime log and directory configurations
 
 :: SuroADB 12.1 11218 853am (BETA E)
 - fixed a minor text interface mistake in uninstall
+
+:: SuroADB 12.1 11318 825am (BETA E)
+- added the betabuildno environment variable
+ |- can be used to identify the current beta version
+ |- a file is made to %tempdir%\SuroADB called "betabuild.bat" which contains the infomation
+ |--located in :preload near lines 594 - 598
+
+:: SuroADB 12.1 11318 1011am (BETA E)
+- Updated sroadbupdate.exe to fetch Beta releases
+- SuroADB will now start the beta version of SuroADB if available
