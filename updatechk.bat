@@ -1,6 +1,6 @@
-set newver=121
-set rawver=121
-set betabuild=121F
+set newver=12
+set rawver=12
+set betabuild=121E
 set linea===========================================================
 set lineb=Notes:
 set linec= - Added titles for commands on runtime
