@@ -1,3 +1,4 @@
+@echo off
 CD %MYFILES%
 cls
 title SuroADB Update Checker
@@ -22,11 +23,11 @@ IF NOT EXIST "%MYFILES%\download.exe" goto missingfiles
 DEL /Q %MYFILES%\updatechk.bat
 DEL /Q %MYFILES%\sroadbdb.bat
 cls
-echo Fetching updatechk.bat (contains new version information) (pastebin.com/raw/R5TTPUzW)
+echo Fetching updatechk.bat (contains new version information) (GitHub)
 echo.
 download https://github.com/nicamoq/SuroADB/raw/master/updatechk.bat updatechk.bat
 echo.
-echo Fetching sroadbdb.bat (contains latest databases for comparison) (pastebin.com/raw/2Udw93tz)
+echo Fetching sroadbdb.bat (contains latest databases for comparison) (GitHub)
 echo.
 download https://github.com/nicamoq/SuroADB/raw/master/sroadbdb.bat sroadbdb.bat
 IF EXIST "%MYFILES%\sroadbdb.bat" echo %TIME% downloaded the latest database >> %MYFILES%\sroadbtemp\Update\updatelog.txt
@@ -82,3 +83,32 @@ IF EXIST "%MYFILES%\sroadbtemp\Update\updatechk.bat" DEL /Q "%MYFILES%\sroadbtem
 ping localhost -n 3 >nul
 cls
 exit
+
+:: DESIGNED TO WORK FOR 10.1~
+:: ERROR :(
+:: still has error with goto command, try to reduce working directory to "/sroadbtemp/Update" instead of MYFILES (nope not the cause)
+::probably the root of the problem! the fucking path is directly set to MYFILES\Update instead of MYFILES\SuroADB\Update you fucking cunt
+:: FINALLY FIXED goto ERROR! needed a fucking variable for rawver
+
+::add an update check for database (db) file with date and ver comparison
+:: ^but it directly downloads the latest db file instead
+
+::syntax error after download
+::  fixed updatelog for database in sroadbupdate 
+
+::sroadb11.1 10418
+- improved the ui to be more manual-reading friendly
+
+::sroadb 11.1 10618
+- added the filerawver environment variable
+- some more manual-friendly ui improvements
+
+::sroadb 12 101118
+- updated for SuroADB 12
+
+::sroadb 12 102718
+- updated for SuroADB 12 again
+
+::sroadb 12.1 11118
+- updated for SuroADB 12.1
+- now hosted on github!
