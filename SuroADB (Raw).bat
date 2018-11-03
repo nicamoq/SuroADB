@@ -3,6 +3,8 @@
 set version=12.1
 set newver=%version%
 set rawver=121
+set betabuild=121E
+set betabuildno=121E
 set filerawver=121
 set diode=f0
 set logst=YES
@@ -234,7 +236,7 @@ set /p exsdconfig= :
 cls
 IF EXIST "%tempdir%\db\sroadbdb.bat" call "%tempdir%\db\sroadbdb.bat"
 ping localhost -n 2 >nul
-echo set exsdconfig=%exsdconfig%>%audir%\sroadbexsdconfig.bat
+echo set exsdconfig=%exsdconfig% > "%audir%\sroadbexsdconfig.bat"
 goto cfgcrr3
 
 :cfgcrr3
@@ -556,8 +558,23 @@ cd "%MYFILES%"
 
 :: This will run when sroadb00w.txt is not present.
 :preload
+IF EXIST "%tempdir%\SuroADB\betabuild.bat" call "%tempdir%\SuroADB\betabuild.bat"
+IF %betabuild%==%betabuildno% goto preload2
+IF NOT %betabuild%==%betabuildno% goto betabuildstarter
+:preload2
+echo set betabuild=%betabuildno% > "%tempdir%\SuroADB\betabuild.bat"
 IF EXIST "%MYFILES%\sroadb%filerawver%w.txt" goto menu
 echo SuroADB %version% installed as %MYFILES% on %TIME% %DATE%  > "sroadb%filerawver%w.txt"
+goto verify
+
+:betabuildstarter
+echo %TIME% %DATE% SuroADB BETA %betabuild% is available! > "%tempir%\SuroADB\sroadb-runtime.txt"
+IF NOT EXIST "%MYFILES%\SuroADB!Beta.exe" echo %TIME% %DATE% SuroADB!Beta.exe is missing.. > "%tempir%\SuroADB\sroadb-runtime.txt"
+IF NOT EXIST "%MYFILES%\SuroADB!Beta.exe" goto verify
+echo %TIME% %DATE% Starting SuroADB!Beta.exe.. > "%tempir%\SuroADB\sroadb-runtime.txt"
+start SuroADB!Beta.exe
+exit
+
 
 :: This verifies that the extraction of embedded ADB files have been
 :: successful. This only needs to run once.
@@ -908,7 +925,6 @@ IF /i %main%==wifi goto wirels
 IF /i %main%==reboot goto op8
 IF /i %main%==help goto helpmenu
 IF /i %main%==exit goto exitp
-IF /i %main%==EXIT goto exitp
 IF /i %main%==restart goto deeprestart
 IF /i %main%==settings goto suroadbm
 :errorm
@@ -947,7 +963,6 @@ IF /i %main%==wifi goto wirels
 IF /i %main%==reboot goto op8
 IF /i %main%==help goto helpmenu
 IF /i %main%==exit goto exitp
-IF /i %main%==EXIT goto exitp
 IF /i %main%==restart goto deeprestart
 IF /i %main%==settings goto suroadbm
 :errorm
