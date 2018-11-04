@@ -74,3 +74,6 @@ ex. Runtime adb devices, Runtime log and directory configurations
 
 :: SuroADB 12.1 11418 (BETA E)
 - sroadbupdateui will now launch if an update to the build is available
+
+:: SuroADB 12.1 11418 (BETA E)
+- Finalized and improved how SuroADB detects and starts SuroADB!Beta.exe, if available
