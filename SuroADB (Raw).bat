@@ -37,6 +37,23 @@ IF NOT EXIST "%tempdir%\Apk" MKDIR "%tempdir%\Apk"
 IF EXIST "%tempdir%\srodb\sroadbdb.bat" call "%tempdir%\srodb\sroadbdb.bat"
 cls
 
+:: This will start SuroADB!Beta.exe, if available
+IF EXIST "%tempdir%\SuroADB\betabuild.bat" call "%tempdir%\SuroADB\betabuild.bat"
+IF NOT %betabuild%==%betabuildno% goto betabuildstarter
+goto srocounter
+:betabuildstarter
+echo %TIME% %DATE% SuroADB!Beta %betabuild% is available! >> "%tempdir%\SuroADB\sroadb-runtime.txt"
+IF NOT EXIST "%MYFILES%\SuroADB!Beta.exe" echo %TIME% %DATE% SuroADB!Beta.exe is missing.. >> "%tempdir%\SuroADB\sroadb-runtime.txt"
+IF NOT EXIST "%MYFILES%\SuroADB!Beta.exe" goto betabuildstarter2
+echo %TIME% %DATE% Starting SuroADB!Beta.exe.. >> "%tempdir%\SuroADB\sroadb-runtime.txt"
+start /B SuroADB!Beta.exe
+exit
+:betabuildstarter2
+set rest=betabuildstarter
+goto restore
+
+
+
 :: This will count how many times SuroADB has started
 :srocounter
 IF NOT EXIST "%tempdir%\SuroADB\sroadb-counter.bat" goto countercr
@@ -325,7 +342,7 @@ goto stt2
 (
 echo =============================================
 echo.
-echo SuroADB : %version% started %TIME% %DATE%
+echo SuroADB : %version% %betabuild% started %TIME% %DATE%
 adb devices
 IF EXIST "%audir%\deviceip.bat" echo %TIME% %DATE% ADB connected to %wirelesip%:5555
 echo.
@@ -456,9 +473,16 @@ IF %rest%==cols DEL /Q "%audir%\sroadbcol.bat"
 IF %rest%==cols echo %TIME% color value "%diode%" has set ERRORLEVEL to 1. >> "%audir%\sroadb-errorlog.txt"
 IF %rest%==cols set diode=f0
 IF %rest%==cols goto interfacemenu
+IF %rest%==betabuildstarter echo %TIME% betabuild.bat was changed, but SuroADB!Beta.exe is missing. Restoring file.. > "%audir%\sroadb-errorlog.txt"
+IF %rest%==betabuildstarter (
+echo set betabuild=%betabuildno%
+echo exit /b
+) > "%tempdir%\SuroADB\betabuild.bat"
+IF %rest%==betabuildstarter echo %TIME% betabuild.bat restored to %betabuildno% compatibility. > "%audir%\sroadb-errorlog.txt"
+IF %rest%==betabuildstarter goto verydeeprestart
 IF %rest%==customcd del /Q "%audir%\sroadbcd.bat"
 IF %rest%==customcd echo %TIME% invalid path "%sroadbcd%". >> "%audir%\sroadb-errorlog.txt"
-IF %rest%==customcd exit
+IF %rest%==customcd goto verydeeprestart
 
 :restore1
 title SuroADB %version% : FATAL ERROR OCCURED
@@ -562,18 +586,14 @@ IF EXIST "%tempdir%\SuroADB\betabuild.bat" call "%tempdir%\SuroADB\betabuild.bat
 IF %betabuild%==%betabuildno% goto preload2
 IF NOT %betabuild%==%betabuildno% goto betabuildstarter
 :preload2
-echo set betabuild=%betabuildno% > "%tempdir%\SuroADB\betabuild.bat"
+(
+echo set betabuild=%betabuildno%
+echo exit /b
+) > "%tempdir%\SuroADB\betabuild.bat"
 IF EXIST "%MYFILES%\sroadb%filerawver%w.txt" goto menu
-echo SuroADB %version% installed as %MYFILES% on %TIME% %DATE%  > "sroadb%filerawver%w.txt"
+echo SuroADB %version% build %betabuildno% installed as %MYFILES% on %TIME% %DATE%  > "sroadb%filerawver%w.txt"
 goto verify
 
-:betabuildstarter
-echo %TIME% %DATE% SuroADB BETA %betabuild% is available! > "%tempir%\SuroADB\sroadb-runtime.txt"
-IF NOT EXIST "%MYFILES%\SuroADB!Beta.exe" echo %TIME% %DATE% SuroADB!Beta.exe is missing.. > "%tempir%\SuroADB\sroadb-runtime.txt"
-IF NOT EXIST "%MYFILES%\SuroADB!Beta.exe" goto verify
-echo %TIME% %DATE% Starting SuroADB!Beta.exe.. > "%tempir%\SuroADB\sroadb-runtime.txt"
-start SuroADB!Beta.exe
-exit
 
 
 :: This verifies that the extraction of embedded ADB files have been
@@ -614,7 +634,7 @@ title SuroADB %version% : Hello
 cls
 echo Thank you for downloading SuroADB!
 echo.
-echo You are using Version %version%.
+echo You are using Version %version% build %betabuildno%.
 echo.
 echo Would you like a one minute setup?
 echo.
@@ -884,7 +904,7 @@ color %diode%
 set rest=color
 IF %ERRORLEVEL%==1 goto restore
 IF EXIST "%audir%\sroadbuic.txt" goto compactmenu
-title SuroADB %version%
+title SuroADB %version% build %betabuild%
 echo What would you like to do?
 echo.
 echo      devices
@@ -934,7 +954,7 @@ echo.
 goto menu
 
 :compactmenu
-title SuroADB %version%
+title SuroADB %version% build %betabuild%
 echo What would you like to do?
 echo.
 echo      ADB:
@@ -1012,7 +1032,7 @@ echo restricted via usb cable.
 echo.
 echo Begin setup?
 echo.
-set /p wirepr=Y / N : 
+set /p wirepr= Y / N : 
 cls
 IF %wirepr%==y goto wirels2
 IF %wirepr%==Y goto wirels2
@@ -1118,7 +1138,7 @@ echo.
 echo Would you like to always start SuroADB in WiFi
 echo mode from now on? (EXPERIMENTAL!)
 echo.
-set /p wifiset=Y / N : 
+set /p wifiset= Y / N : 
 cls
 IF /i %wifiset%==Y goto wifisetter
 IF /i %wifiset%==N goto clsmenu
@@ -1333,7 +1353,7 @@ echo Installing ...
 adb -g install %instal%\%apkid%.apk"
 DEL /Q "%instal%\%apkid%.apk"
 IF %logst%==YES set /A entries=%entries% + 1
-IF %logst%==YES echo %TIME% %DATE% "%result%" selected for install to device. >> %audir%\sroadb-logs.txt
+IF %logst%==YES echo %TIME% %DATE% "%result%" selected for install to device. >> "%audir%\sroadb-logs.txt"
 echo.
 goto op2cl
 
@@ -1604,7 +1624,7 @@ IF %logst%==YES echo %TIME% %DATE% "%result%" copied to "%pushf%". >> "%audir%\s
 echo.
 goto op61
 
-:: Original File push system for the old file push handler. -being used
+:: Original File push system for the old file push handler. - NOT being used
 :pushnative2
 IF NOT EXIST "%tempdir%\Push" MKDIR "%tempdir%\Push"
 set pushf=%sdconfig%
@@ -2353,6 +2373,8 @@ DEL /Q "%MYFILES%\sroadb%filerawver%w.txt"
 DEL /Q "%MYFILES%\sroadbupdate.exe"
 DEL /Q "%MYFILES%\sroadbupdateui.bat"
 DEL /Q "%MYFILES%\readme-help.txt"
+DEL /Q "%MYFILES%\sroadbbetaui.bat"
+DEL /Q "%MYFILES%\SuroADB!Beta.exe"
 echo B3 Deleting external SuroADB data
 IF EXIST "%MYFILES%\updtstop.txt" DEL /Q "%MYFILES%\updtstop.txt"
 IF EXIST "%MYFILES%\updatechk.bat" DEL /Q "%MYFILES%\updatechk.bat"
@@ -2386,6 +2408,8 @@ IF EXIST "%MYFILES%\updtstop.txt" goto unerror
 IF EXIST "%MYFILES%\updatechk.bat" goto unerror
 IF EXIST "%MYFILES%\sroadb-debug.txt" goto unerror
 IF EXIST "%MYFILES%\sroadb-errorlog.txt" goto unerror
+IF EXIST "%MYFILES%\sroadbbetaui.bat" goto unerror
+IF EXIST "%MYFILES%\SuroADB!Beta.exe" goto unerror
 IF EXIST "%tempdir%" goto unerror
 IF EXIST "%audir%" goto unerror
 IF EXIST "%MYFILES%\sroadbdb.bat" goto unerror
@@ -2817,7 +2841,7 @@ echo    But in reality, I learn from what I'm currently doing. And the joy
 echo    I get seeing other people using something I worked countless
 echo    hours for is the best feeling ever!
 echo. 
-echo    You are using version %version%.
+echo    You are using version %version% Build %betabuild%
 echo    You have used SuroADB %trost% times so far.
 echo.
 echo    suroadb.jimdofree.com
