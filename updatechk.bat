@@ -1,12 +1,12 @@
-set newver=12
-set rawver=12
+set newver=12.1
+set rawver=121
 set betabuild=121F
 set linea===========================================================
 set lineb=Notes:
-set linec= - Added titles for commands on runtime
-set lined= - Minor bug fixes and improvements to runtime
-set linee= - Reworked color scheme setter
-set linef= - A handful of UI adjustments and improvements
+set linec= - Now hosted on GitHub! https://github.com/nicamoq/SuroADB
+set lined= - fixed APK install menu unable to go back to main bug
+set linee= - Updated sroadbupdate.exe to fetch Beta releases
+set linef= - fixed "cols" and "color" on normal and menu interfacemenu ui
 set lineg=echo More info: pastebin.com/JAX6fVnc
 set lineh=echo ==========================================================
 set linei=
