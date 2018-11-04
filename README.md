@@ -1,3 +1,8 @@
+<!DOCTYPE HTML>
+<head>
+  </head>
+  
+  <body>
 <h3>SuroADB Server for update checking and resource downloading.</h3>
 
 <strong>Note: Only applies to SuroADB 12.1 and up. Previous versions of SuroADB rely
@@ -17,6 +22,11 @@ Information on files:
 
 <p style="color:tomato;font:Roboto Thin;">This is the main SuroADB RAW Source Code. Updates frequently and requires
 a third-party bat-to-exe conversion software to work properly.</p>
+
+<strong>SuroADB!Beta.exe</strong>
+
+<p style="color:tomato;font:Roboto Thin;">Basically the latest version of SuroADB Beta, but without the pre-compiled adb resources. This can<br>be delivered on-the-fly to the new SuroADB BETA Update UI without additional manual download in this page. When downloaded<br>
+  and succesfully set up, SuroADB will automatically start this version.</p>
 
 <strong>SuroADB.exe</strong>
 
@@ -40,3 +50,5 @@ with each SuroADB release.</p>
 
 <p style="color:tomato;font:Roboto Thin;">Contains new version information and description. Always downloaded by SuroADB's
 update checker as well.</p>
+
+</html>
