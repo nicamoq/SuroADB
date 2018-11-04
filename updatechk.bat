@@ -1,6 +1,6 @@
 set newver=12.1
 set rawver=121
-set betabuild=121F
+set betabuild=121E
 set linea===========================================================
 set lineb=Notes:
 set linec= - Now hosted on GitHub! https://github.com/nicamoq/SuroADB
