@@ -1,0 +1,333 @@
+====================================================================================
+SuroADB Release Notes          kutsuro.simdif.com | suroadb.jimdofree.com
+====================================================================================
+Latest:
+11/4/18 - 12.1 End of sembreak
+              - now hosted on GitHub!
+              - added support for BETA version fetching
+               • SuroADB can automatically start and use the latest BETA version automatically
+              - changed all update checking servers to GitHub
+              - fixed APK install menu unable to go back to main bug
+              - fixed "cols" and "color" on normal and menu color scheme changer's ui
+              - fixed a minor text interface mistake in uninstall
+              - some more stuff that i forgot to note out
+              
+              Ah, it's finally the beggining of the Second Semester.
+              
+              SuroADB is now hosted on GitHub, which is faster and easier! I was not able to update much of the actual
+              ADB scripts because I focused on support for easier updates.
+              
+              
+              The new BETA version fetching works like this:
+              
+              You download 12.1 >> You will get notified if a work-in-progress version of v13.0 is out ex. 13A >> If you choose to
+              download the new version, the fetcher UI will automatically set SuroADB to start the new version >> fetcher UI will
+              grab SuroADB 13.0BETA Build 13A from GitHub which is only 400kb >> Once done downloading, SuroADB will now start that
+              version when you start the original version you were using (12.1)
+              
+              So basically starting SuroADB 12.1 will now redirect you to SuroADB 13.0 BETA Build 13A at startup if you chose to
+              download the aforementioned BETA version.
+              
+              Pretty complicated? Yeah, I know. I spent hours making the script for this.
+              
+              
+              See you!
+              
+10/28/18 - 12 SEMMMMMMBREAAAAAAAK
+              - Added titles for commands on runtime (so you will know what's currently going on)
+              - Minor bug fixes and improvements to runtime
+              - Removed some adb install features as they are unstable
+              - Reworked color scheme setter:
+               • now works faster and does not need a full restart of SuroADB
+               • also improved it's error identification
+              - UI adjustments and improvements:
+               • apk install and other commands' ui fixed to their menus after execution (it used to go back to MAIN menu)
+               • added some dialogue for apk install such as Copying to "%wdre%\sroadbtemp\SuroADB" ...
+               • improved screenshot and screenrecord ui functions
+               • added cls function after every input (so you won't get an awkward delay feel)
+              - Probably fixed more stuff but forgot to note them
+
+              It's currently sem break here in the Philippines, I'm so sorry I was not able to update SuroADB! As the second semester
+              was fast approaching, of course our teachers for the first semester gave us a TON of things to do, which left us students
+              very busy. I was quite busy but I was still able to upload BETA versions of SuroADB which are readily available but very
+              unstable.
+
+              I hope this second sem will go easy on me.. as I can't set my priorities straight.
+
+
+10/8/18 - 11.1 Stability fixes
+              - Fixed a flaw for the file push error detection
+              - Improved the UI for WiFi mode setter
+              - Fixed a few bugs for WiFi mode setter
+              - Added some minor performance improvements
+              - Minor improvements to update checker
+
+              See you in the next update!
+
+
+9/29/18 - 11 The most "stable" release yet! -NOPE
+              - Added the "Compact" menu UI mode
+              - Added ADB wifi debugging support
+              - Added an external comparing database (for error corrections)
+              - Finally updated the help menu
+              - Improved path config features
+              - Improved inputs
+              - Improved some UI elements
+              - Fixed and improved the Uninstall feature
+              - A LOT of bug fixes and improvements (lost count!)
+              - And some others I forgot I added
+
+              It's been two whole weeks since I released the heavily bugged SuroADB 10.1. I sincerely apologized for the delay!
+
+              I have been very busy with school work lately. I was working in and out of my laptop due to my laziness and busy
+              schedules, thus I was not really able to decide what to do next.. should I release this mess for my angry users or should
+              I wait until i'm less busy (another 1 week), then finish it?? Well I obviously chose option 2.
+
+              To be honest, I think my decision was very much for the best. I was able to make some swift fixes a few hours ago
+              and made ((code audits)) to be sure that there's no remaining bugs (which will be discovered later anyway :P).
+
+              Okay enough personal stuff, this update brings a new feature- WIFI mode! Now you can set SuroADB to automatically start
+              ADB to connect with your device via the same hotspot your computer and device are in so you won't rely on a cable much.
+
+              Please report bugs at suroadb.jimdoree.com/contact/ it's highly appreciated!
+
+9/14/18 - 10.1 One step for Background Threading
+              - Improved Update checking by making it a Background Thread so SuroADB can start faster
+              - Improved logging (Error logging, Session logging, Logging altogether)
+              - Added more error handling countermeasures
+              - Added logging for Update checking
+              - Added the Uninstall option (unstable)
+              - Minor UI tweaks
+              - Bug fixes
+
+              
+              I have made the Update Check feature completely background threaded so SuroADB will start waaaay faster. The slow start
+              was an issue caused by the download script if the user has slow internet. This new and improved update checker will
+              run in the background until it successfully downloads or fails updatechk.bat. A popup prompt will show when an update
+              is available while you use SuroADB (and it's so goddamn satisfying!).
+              
+              I will experiment with off-window processes for a while, and I might add them in SuroADB's file Push and Pull
+              features soon to support Multi-tasking.
+              
+9/8/18 - 10 Long break
+              - Added more ADB features for APK install, (install to sdcard, replace existing app, etc)
+              - Added UI for update feature in suroadb settings
+              - Added directory configuration for Internal and External storage and added a UI for it (Currently has no use)
+              - Added the debug test (creates debug report for troubleshooting)
+              - Removed file push command "Copy to a folder named SuroADB" flawed feature (now it copies to the path you enter instead)
+              - Removed "cls" from file and folder pull command to prevent sudden clearing of screen
+              - Various fixes for file push
+              - Slightly minor changes to logs
+              - Log file generation improvements
+              - Tweaked the UI
+              - Fixed various scripts and minor bugs
+              - New material icon
+
+              Sorry for the wait! I was quite busy with school stuff these past few weeks and i didn't have enough time and energy to 
+              finish the update quite soon, but here it is!
+
+              I was planning to release it last Sunday but it was unfinished and was riddled with bugs. I just made the scripts for the 
+              updated adb features, removed file push to suroadb, and some other fixes and improvements just a few hours ago. By the 
+              way, it's 12:19 AM and i'm very sleepy. Well, enjoy the new update!
+
+8/19/18 - 9.1 Hotfix and more error handling
+              - HOTFIX: Uninstall command exiting randomly bug fixed
+              - Revamped file copy and apk install to detect errors
+              - Added error dialogs for Install and Push
+              - Added "exit /b" commands for automatic restore scripts (so they don't stay in processes)
+              - Added loading bar for update check at startup, same goes for the settings version
+              - Added a 1 second pause for automatic restore script creation (the os can't keep up with cmd sometimes)
+              - Improved the Update Check feature
+              - Removed "failed to fetch updatechk.bat" error
+              - Tweaked the UI and fixed various code errors
+
+
+              For the install command, after selecting an apk, it will copy to SuroADB's temp folder, then it will be renamed to
+              a random string (ex. 6969.apk). This is because ADB can't handle filenames with spaces/long characters. It's also
+              an added error handler! If windows cannot copy the file due to filename error, SuroADB will detect this and prompt
+              you to rename the apk. This is the same mechanism for the file Push command.
+
+8/15/18 - 9.0 Bugfixes
+              - Fixed the custom directory feature (it resets after start)
+              - Revamped how files are copied to device (the selected file will be copied to a temp folder, then copied to device)
+              - Added option to opt out of update checking via First Run screen
+              - Some other minor adjustments for the UI and code
+
+8/5/18 8.1 FINAL Update
+
+              - SuroADB will now check for updates in each start (you can disable it by adding updtstop.txt to the TEMP folder)
+                • You can do this in SuroADB by entering adb custom mode, then enter "echo > updtstop.txt" without quotes.
+              - Fixed a few command errors, slightly improved error handling
+              - Fixed typos in dialogues
+              - Removed a few unnecessary lines of code that were kept before 7.1
+
+              Source code will now be released as a snippet get-go rather than a full complicated copy-paste from the original
+              program itself. This is due to the complicated process of needing to convert it first before it can be used.
+
+
+I am thinking of retiring from updating SuroADB due to busy schedules and other personal interests ( also due to a lack of audience and users D: )
+
+Bit ironic that i  implement the update check feature right after deciding to retire development.. (heh) (its for bug fixes anyway)
+
+
+Anyways, if you're using SuroADB, thank you! You're the one that kept me going.
+
+suroadb.jimdofree.com
+
+
+
+7/29/18 8.0 Bug fixes, Reworked logging
+
+              - HOTFIX: Packages command starts the Pull command error fixed
+              - Improved the packages command with a new feature
+                Feature:
+                • Option to export all package names into a text file
+              - Fixed a few bugs
+              - Improved error handling, error logs will now be exported to "sroadb-errorlog.txt"
+              - Improved and reworked logging, logs will now be exported to "sroadb-logs.txt"
+
+              Logging has been reworked to export in a single text file along with the time and date, so it's easier to read
+              and won't look like a mess.
+
+              Thank you!
+
+
+
+7/22/18 7.1  Sleepless REVAMP - SuroADB is now standalone-only
+
+              - Added adb shell mode
+              - Replaced the old "suroadb" to; and added the SuroADB Settings menu
+              - Moved the Interface feature to SuroADB Settings and renamed it to "col"
+              - Added logging again, but this time, you have the option to turn it on and off
+              - Implemented automatic-restore scripts that will apply at start
+
+                Features that have this:
+                • Custom working directory
+                • Logging switch (yes/no)
+                • Color scheme
+                • Screen recording size
+                • Screen recording time
+                • Screen recording save path
+                • Screenshot save path
+
+              - Improved various features (primarily screenshot and screenrecord)
+              - Revamped improvements for error handling
+
+
+              Note: SuroADB uses a Windows temp folder as a working directory by default.
+                    SuroADB will not work if executed outside the HOME drive. (usually C:)
+
+
+              Starting now, SuroADB will be released as Standalone only. New and old features have been revamped and designed to
+              work with SuroADB's Temp folder. I have made this decision due to my own interests and due to my busy schedules affecting
+              how i work on it.
+
+              If you're reading this, thank you for taking the time to use SuroADB. I really appreciate it.
+
+              
+              Open the readme-help.txt file by navigating to the menu > suroadb > readme
+
+
+7/14/18 7.0
+
+              - Added option to extract adb repositories (troubleshoot)
+              - Added option to cd to the Standalone TEMP folder
+              - Improved the troubleshoot feature
+              - Changed the icon to be more relevant to android
+              - Removed the automatic window sizer (it cuts out a lot of lines)
+              - Removed the ":: kutsuro.simdif.com" header (it looks hideous)
+              - Removed logging (time limits, sorry!)
+              - Added another download server
+ 
+
+7/1/18  6.1 - Standalone release
+
+              -New SuroADB version : STANDALONE (no platform-tools required)
+              -Added the CUSTOM MODE feature, (you can now input custom adb commands)
+              -improved and easier input selection (YES;NO changed to Y;N)
+              -added the option to choose custom path (for screenshot and screenrecord)
+              -improved ui for screenrecord and screenshot
+              -improved the help menu
+              -made log notes more simpler
+              -removed logging for exit and update
+
+
+6/23/18  6.0 - ULTIMATE UI REVAMP!
+
+              - LESS TYPING! You can now select files and folders with the Explorer.
+                This only works with the .exe version
+              - SuroADB will now create up to 20 event logs inside \platform-tools\
+              - Window sized to 30 lines (so no scrolling required for some commands)
+              - Improved input
+              - EXIT now kills adb.exe (adb daemon) with taskkill
+              - Updated help menu
+              - Improved error statements
+              - HUGE Improvement to the UI
+              - Changed Icon
+              - You can now enter the EXIT command on any part of SuroADB.
+                This only works with the .exe version
+
+
+Warning: SuroADB.exe has a tendency to freeze if you directly close it with the traditional way to
+              close application, You may need to close suroadb with the EXIT command
+              or use the included force-close.bat file.
+
+
+6/22/18  5.1
+
+             - Added option to reboot to Recovery, Bootloader, and System
+             - Added update feature
+             - Added troubleshoot feature
+             - Tweaked UI
+             - Replaced Icon
+             - Moved the Batch version to the main download
+             - Added some magic
+
+
+6/10/18  5.0
+
+              - Improved UI
+              - Improved error statements
+              - Improved the INTERFACE menu
+              - Replaced Icon
+              - Replaced download server to Google Drive
+              - BATCH file can now be downloaded.
+
+
+
+6/3/18  4.1 - The REAL Revamp update
+
+              - Improved the help menu
+              - Improved error statements
+              - Added ability to go back to the menu
+              - Added SCREENSHOT command
+              - Added SCREENRECORD command
+              - Added INTERFACE feature
+              - Removed introduction screen (was annoying)
+              - New icon
+
+6/2/18  4.0 - Revamp update
+
+              - Fixed RESTART function
+              - Tweaked UI for better reading
+              - Improved action selection
+              - added reboot and poweroff confirmation
+              - Improved dialog
+              - Improved platform-tools detection
+              - New icon
+              - File size compressed
+
+5/28/18 3.0 (Unreleased)
+
+              - Overall improvement of error identification
+              - added RESTART function
+              - fixed UI
+
+5/26/18  2.0
+
+              - Fixed a few errors
+              - added the EXIT function
+
+5/20/18 1.0
+
+             - Released SuroADB
