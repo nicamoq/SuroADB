@@ -32,12 +32,16 @@ echo.
 echo Fetching sroadbdb.bat (contains latest databases for comparison) (GitHub)
 echo.
 download https://github.com/nicamoq/SuroADB/raw/master/sroadbdb.bat sroadbdb.bat
+echo.
 IF EXIST "%MYFILES%\sroadbdb.bat" echo %TIME% downloaded the latest database >> "%MYFILES%\sroadbtemp\Update\updatelog.txt"
 IF EXIST "%MYFILES%\sroadbdb.bat" echo Latest sroadbdb.bat databases has been downloaded!
-echo.
 MOVE /Y "%MYFILES%\sroadbdb.bat" "%MYFILES%\sroadbtemp\db" >nul
 MOVE /Y "%MYFILES%\updatechk.bat" "%MYFILES%\sroadbtemp\Update" >nul
 ping localhost -n 3 >nul
+IF NOT EXIST "%MYFILES%\sroadbbetaui.bat" goto missingfiles
+goto cont
+
+:cont
 IF EXIST "%MYFILES%\sroadbtemp\Update\updatechk.bat" call "%MYFILES%\sroadbtemp\Update\updatechk.bat"
 IF NOT EXIST "%MYFILES%\sroadbtemp\Update\updatechk.bat" goto not
 IF NOT %rawver%==%filerawver% goto av
@@ -60,74 +64,12 @@ exit
 
 :bv
 taskkill /F /IM download.exe
-rem ShowSelf
-echo %TIME% SuroADB BETA %betabuild% available! >> "%MYFILES%\sroadbtemp\Update\updatelog.txt"
-cls
-echo SuroADB BETA %betabuild% is available!
-echo.
-echo The BETA release you are using is %betabuildno%
-echo.
-echo Would you like to download and directly use %betabuild%?
-echo.
-set /p bvv= Y / N : 
-cls
-IF /i %bvv%==Y goto bv2
-IF /i %bvv%==N exit
-goto bv
-
-:bv2
-echo %TIME% downloading SuroADB BETA %betabuild% >> "%MYFILES%\sroadbtemp\Update\updatelog.txt"
-title Downloading SuroADB BETA %betabuild% (400kb)
-cls
-echo Downloading SuroADB %betabuild%..
-download https://github.com/nicamoq/SuroADB/raw/master/SuroADB!Beta.exe SuroADB!Beta.exe
-IF NOT EXIST "%MYFILES%\SuroADB!Beta.exe" goto bv404
-IF EXIST "%MYFILES%\SuroADB!Beta.exe" goto bv3
-:bv404
-echo %TIME% fail to download, retrying.. >> "%MYFILES%\sroadbtemp\Update\updatelog.txt"
-title Download failed
-cls
-echo Retrying in 3 seconds..
-ping localhost -n 4 >nul
-goto bv2
-
-:bv3
-title Setting up...
-cls
-IF NOT EXIST "%MYFILES%\adb.exe" goto v2f
-IF NOT EXIST "%MYFILES%\AdbWinApi.dll" goto v2f
-IF NOT EXIST "%MYFILES%\AdbWinUsbApi.dll" goto v2f
-IF NOT EXIST "%MYFILES%\dmtracedump.exe" goto v2f
-IF NOT EXIST "%MYFILES%\etc1tool.exe" goto v2f
-IF NOT EXIST "%MYFILES%\fastboot.exe" goto v2f
-IF NOT EXIST "%MYFILES%\hprof-conv.exe" goto v2f
-IF NOT EXIST "%MYFILES%\make_f2fs.exe" goto v2f
-IF NOT EXIST "%MYFILES%\mke2fs.conf" goto v2f
-IF NOT EXIST "%MYFILES%\mke2fs.exe" goto v2f
-IF NOT EXIST "%MYFILES%\source.properties" goto v2f
-IF NOT EXIST "%MYFILES%\sqlite3.exe" goto v2f
-echo set betabuild=%betabuild% > "%tempdir%\SuroADB\betabuild.bat"
-cls
-:bv4
-cls
-echo SuroADB Beta %betabuild% is now available to use.
-echo.
-echo It will automatically start after you launch the previous
-echo version of SuroADB (%betabuildno%)
-echo.
-pause
+set newbuild=%betabuild%
+IF EXIST "%tempdir%\SuroADB\betabuild.bat" CALL "%tempdir%\SuroADB\betabuild.bat"
+IF %newbuild%==%betabuild% exit
+IF NOT EXIST "%MYFILES%\sroadbbetaui.bat" goto missingfiles
+start "%SystemRoot%\cmd.exe" "%MYFILES%\sroadbbetaui.bat"
 exit
-
-
-
-:v2f
-echo %TIME% missing files for betabuild config >> "%MYFILES%\sroadbtemp\Update\updatelog.txt"
-cls
-echo Some files are missing! please start the 6 MB SuroADB package again
-echo to extract required files.
-pause
-exit
-
 
 :updtno
 taskkill /F /IM download.exe
