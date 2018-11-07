@@ -1,11 +1,11 @@
 @echo off
 :verydeeprestart
-set version=12.1
+set version=13
 set newver=%version%
-set rawver=121
-set betabuild=121E
-set betabuildno=121E
-set filerawver=121
+set rawver=13
+set betabuild=13A
+set betabuildno=13A
+set filerawver=13
 set diode=f0
 set logst=YES
 set entries=0
@@ -378,6 +378,7 @@ IF EXIST "%MYFILES%\sroadb111w.txt" set localver=11.1
 IF EXIST "%MYFILES%\sroadb111w.txt" goto oldvergen
 IF EXIST "%MYFILES%\sroadb12w.txt" set localver=12
 IF EXIST "%MYFILES%\sroadb12w.txt" goto oldvergen
+IF EXIST "%MYFILES%\sroadb12w.txt"
 
 
 goto conft
@@ -1503,11 +1504,11 @@ IF EXIST "%tempdir%\db\sroadbdb.bat" call "%tempdir%\db\sroadbdb.bat"
 ping localhost -n 2 >nul
 IF /i %pullf%==MENU goto clsmenu
 cls
-echo Select the folder where the file/folder will be copied to.
+echo Select the folder where "%pullf%" will be copied to.
 rem BrowseFolder
 cls
 IF %result%==0 set opcode=File pull destination.
-IF %result%==0 goto opcancel
+IF %result%==0 goto op5
 echo Copying : %pullf%
 echo To : %result%
 echo.
@@ -1611,7 +1612,7 @@ echo.
 echo Enter the path to where the folder should go
 echo ex. %sdconfig%/folders
 echo.
-set /p pushf=: 
+set /p pushf= : 
 cls
 IF EXIST "%tempdir%\db\sroadbdb.bat" call "%tempdir%\db\sroadbdb.bat"
 ping localhost -n 2 >nul
@@ -1624,7 +1625,7 @@ IF %logst%==YES echo %TIME% %DATE% "%result%" copied to "%pushf%". >> "%audir%\s
 echo.
 goto op61
 
-:: Original File push system for the old file push handler. - NOT being used
+:: Original File push system for the old file push handler. - being used by all file push operations
 :pushnative2
 IF NOT EXIST "%tempdir%\Push" MKDIR "%tempdir%\Push"
 set pushf=%sdconfig%
