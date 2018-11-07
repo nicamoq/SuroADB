@@ -81,3 +81,6 @@ ex. Runtime adb devices, Runtime log and directory configurations
 - fixed a minor ui mistake for file pull
 - reverted platform-tools to that of SuroADB 11.1 due to compatibility issues like stuck in mid-pull operation and mismatching adb server
 - minor improvements to file push ui
+
+:: SuroADB 13 11718 (BETA A)
+- fixed a syntax error for old version detection
