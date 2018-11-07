@@ -53,27 +53,31 @@ ex. Runtime adb devices, Runtime log and directory configurations
 :: SuroADB 12.1 11118 848pm (BETA D)
 - fixed "sroadb12w.txt" not being detected by SuroADB 12.1
 
-:: SuroADB 12.1 11218 742am (BETA E) (REL)
+:: SuroADB 12.1 11218 742am (BETA E)
 - added quotation mark on IF NOT EXIST "%tempdir%\SuroADB" MKDIR "%tempdir%\SuroADB"
 
-:: SuroADB 12.1 11218 853am (BETA E) (REL)
+:: SuroADB 12.1 11218 853am (BETA E)
 - fixed a minor text interface mistake in uninstall
 
-:: SuroADB 12.1 11318 825am (BETA E) (REL)
+:: SuroADB 12.1 11318 825am (BETA E)
 - added the betabuildno environment variable
  |- can be used to identify the current beta version
  |- a file is made to %tempdir%\SuroADB called "betabuild.bat" which contains the infomation
  |--located in :preload near lines 594 - 598
 
-:: SuroADB 12.1 11318 1011am (BETA E) (REL)
+:: SuroADB 12.1 11318 1011am (BETA E)
 - Updated sroadbupdate.exe to fetch Beta releases
 - SuroADB will now start the beta version of SuroADB if available
 
-:: SuroADB 12.1 11318 1035am (BETA E) (REL)
+:: SuroADB 12.1 11318 1035am (BETA E)
 - Planning on making sroadbupdate.exe beta checking ui outside of it
 
-:: SuroADB 12.1 11418 (BETA E) (REL)
+:: SuroADB 12.1 11418 (BETA E)
 - sroadbupdateui will now launch if an update to the build is available
 
-:: SuroADB 12.1 11418 (BETA E) (REL)
-- Finalized and improved how SuroADB detects and starts SuroADB!Beta.exe, if available
+>>:: SuroADB 13.0
+
+:: SuroADB 13 11618 (BETA A)
+- fixed a minor ui mistake for file pull
+- reverted platform-tools to that of SuroADB 11.1 due to compatibility issues like stuck in mid-pull operation and mismatching adb server
+- minor improvements to file push ui
