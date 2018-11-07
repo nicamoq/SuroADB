@@ -378,7 +378,8 @@ IF EXIST "%MYFILES%\sroadb111w.txt" set localver=11.1
 IF EXIST "%MYFILES%\sroadb111w.txt" goto oldvergen
 IF EXIST "%MYFILES%\sroadb12w.txt" set localver=12
 IF EXIST "%MYFILES%\sroadb12w.txt" goto oldvergen
-IF EXIST "%MYFILES%\sroadb12w.txt"
+IF EXIST "%MYFILES%\sroadb121w.txt" set localver=12.1
+IF EXIST "%MYFILES%\sroadb121w.txt" goto oldvergen
 
 
 goto conft
@@ -418,6 +419,7 @@ goto conft
 DEL /Q "%MYFILES%\sroadb11w.txt"
 DEL /Q "%MYFILES%\sroadb111w.txt"
 DEL /Q "%MYFILES%\sroadb12w.txt"
+DEL /Q "%MYFILES%\sroadb121w.txt"
 title SuroADB %version%
 cls
 echo You've been using SuroADB %localver%. Great!
