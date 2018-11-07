@@ -3,11 +3,11 @@ CD %MYFILES%
 cls
 title SuroADB Update Checker
 color f0
-set rawver=121
-set newver=12.1
-set filerawver=121
-set betabuild=121E
-set betabuildno=121E
+set rawver=13
+set newver=13
+set filerawver=13
+set betabuild=13A
+set betabuildno=13A
 set tempdir=%MYFILES%\sroadbtemp
 set diode=f0
 taskkill /F /IM download.exe
