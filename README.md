@@ -16,7 +16,7 @@ Github: https://github.com/nicamoq/SuroADB
 
 Information on files:
 
-<strong>(LIVE)</strong> - This means that SuroADB's latest version relies on it. Right now.
+<strong>(LIVE)</strong> - This means that SuroADB's latest version relies on it. Right now.<br>
 <strong>FINAL</strong> - If a release or file has this description, it refers to a final build of a SuroADB version
 
 <strong>SuroADB (Raw).bat</strong>
