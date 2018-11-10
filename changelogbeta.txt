@@ -84,3 +84,7 @@ ex. Runtime adb devices, Runtime log and directory configurations
 
 :: SuroADB 13 11718 (BETA A)
 - fixed a syntax error for old version detection
+
+:: SuroADB 13 111018 (BETA B)
+- updated sroadbupdate.exe to detect old versions to not trigger an "update found" message for them
+- sroadbupdate.exe now relies on a single file to detect version info
