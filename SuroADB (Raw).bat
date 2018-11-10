@@ -3,8 +3,8 @@
 set version=13
 set newver=%version%
 set rawver=13
-set betabuild=13A
-set betabuildno=13A
+set betabuild=13B
+set betabuildno=13B
 set filerawver=13
 set diode=f0
 set logst=YES
@@ -36,6 +36,17 @@ IF NOT EXIST "%tempdir%\db" MKDIR "%tempdir%\db"
 IF NOT EXIST "%tempdir%\Apk" MKDIR "%tempdir%\Apk"
 IF EXIST "%tempdir%\srodb\sroadbdb.bat" call "%tempdir%\srodb\sroadbdb.bat"
 cls
+
+:: This will create the version info file for update checking
+(
+echo set version=%version%
+echo set newver=%version%
+echo set rawver=%rawver%
+echo set betabuild=%betabuild%
+echo set betabuildno=%betabuildno%
+echo set filerawver=%filerawver%
+echo exit /b
+) > "%MYFILES%\sroadbverinfo.bat"
 
 :: This will start SuroADB!Beta.exe, if available
 IF EXIST "%tempdir%\SuroADB\betabuild.bat" call "%tempdir%\SuroADB\betabuild.bat"
