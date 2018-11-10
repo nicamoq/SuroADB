@@ -3,11 +3,13 @@ CD %MYFILES%
 cls
 title SuroADB Update Checker
 color f0
-set rawver=13
-set newver=13
-set filerawver=13
-set betabuild=13A
-set betabuildno=13A
+set rawver=
+set newver=
+set filerawver=
+set betabuild=
+set betabuildno=
+IF EXIST "%MYFILES%\sroadbverinfo.bat" CALL "%MYFILES%\sroadbverinfo.bat"
+IF NOT EXIST "%MYFILES%\sroadbverinfo.bat" goto missingverinfo
 set tempdir=%MYFILES%\sroadbtemp
 set diode=f0
 taskkill /F /IM download.exe
@@ -44,6 +46,21 @@ goto cont
 :cont
 IF EXIST "%MYFILES%\sroadbtemp\Update\updatechk.bat" call "%MYFILES%\sroadbtemp\Update\updatechk.bat"
 IF NOT EXIST "%MYFILES%\sroadbtemp\Update\updatechk.bat" goto not
+
+:: Old version detector
+IF %rawver%==70 goto updtno
+IF %rawver%==71 goto updtno
+IF %rawver%==80 goto updtno
+IF %rawver%==81 goto updtno
+IF %rawver%==90 goto updtno
+IF %rawver%==91 goto updtno
+IF %rawver%==10 goto updtno
+IF %rawver%==101 goto updtno
+IF %rawver%==11 goto updtno
+IF %rawver%==111 goto updtno
+IF %rawver%==12 goto updtno
+IF %rawver%==121 goto updtno
+
 IF NOT %rawver%==%filerawver% goto av
 IF NOT %betabuild%==%betabuildno% goto bv
 IF %rawver%==%filerawver% goto updtno
@@ -97,6 +114,15 @@ echo Missing file! download.exe is missing. Please exit then relaunch SuroADB.
 ping localhost -n 3 >nul
 echo %TIME% download.exe missing >> "%MYFILES%\sroadbtemp\Update\updatelog.txt"
 IF EXIST "%MYFILES%\sroadbtemp\Update\updatechk.bat" DEL /Q "%MYFILES%\sroadbtemp\Update\updatechk.bat"
+ping localhost -n 3 >nul
+cls
+exit
+
+:missingverinfo
+taskkill /F /IM download.exe
+cls
+echo sroadbverinfo.bat is missing. Please exit then relaunch SuroADB.
+echo %TIME% sroadbverinfo.bat missing >> "%MYFILES%\sroadbtemp\Update\updatelog.txt"
 ping localhost -n 3 >nul
 cls
 exit
