@@ -3,12 +3,13 @@
 set version=13
 set newver=%version%
 set rawver=13
-set betabuild=13B
-set betabuildno=13B
+set betabuild=13C
+set betabuildno=13C
 set filerawver=13
 set diode=f0
 set logst=YES
 set entries=0
+set startupcmd=menu
 :stcounter
 set trost=0
 :wifimodevariables
@@ -139,7 +140,7 @@ IF EXIST "%audir%\sroadbexsdconfig.bat" echo %TIME% %DATE% exsdconfig called >> 
 :: This will check for updates at start.
 :updtchk
 IF NOT EXIST "%audir%" MKDIR "%audir%"
-IF EXIST "%MYFILES%\updtstop.txt" echo %TIME% %DATE% updtstop.txt present >> "%tempdir%\SuroADB\sroadb-runtime.txt"
+IF EXIST "%MYFILES%\updtstop.txt" echo %TIME% %DATE% updtstop.txt present, skipping update check >> "%tempdir%\SuroADB\sroadb-runtime.txt"
 IF EXIST "%MYFILES%\updtstop.txt" goto wifidebugmode
 
 :: New Update Check system, now background threadded and relies on sroadbupdate.exe
@@ -223,6 +224,8 @@ goto stt
 
 :: These creates the necessary log files.
 :stt
+IF EXIST "%tempdir%\SuroADB\devchk.txt" echo %TIME% %DATE% devchk.txt present, skipping adb devices check >> "%tempdir%\SuroADB\sroadb-runtime.txt"
+IF EXIST "%tempdir%\SuroADB\devchk.txt" goto sdconfig
 title SuroADB %version% : Starting daemon.. 
 cls
 echo %TIME% %DATE% runtime adb devices check started >> "%tempdir%\SuroADB\sroadb-runtime.txt"
@@ -391,8 +394,6 @@ IF EXIST "%MYFILES%\sroadb12w.txt" set localver=12
 IF EXIST "%MYFILES%\sroadb12w.txt" goto oldvergen
 IF EXIST "%MYFILES%\sroadb121w.txt" set localver=12.1
 IF EXIST "%MYFILES%\sroadb121w.txt" goto oldvergen
-
-
 goto conft
 
 
@@ -604,7 +605,7 @@ IF NOT %betabuild%==%betabuildno% goto betabuildstarter
 echo set betabuild=%betabuildno%
 echo exit /b
 ) > "%tempdir%\SuroADB\betabuild.bat"
-IF EXIST "%MYFILES%\sroadb%filerawver%w.txt" goto menu
+IF EXIST "%MYFILES%\sroadb%filerawver%w.txt" goto premenu
 echo SuroADB %version% build %betabuildno% installed as %MYFILES% on %TIME% %DATE%  > "sroadb%filerawver%w.txt"
 goto verify
 
@@ -618,15 +619,8 @@ cls
 IF NOT EXIST "%MYFILES%\adb.exe" goto v2f
 IF NOT EXIST "%MYFILES%\AdbWinApi.dll" goto v2f
 IF NOT EXIST "%MYFILES%\AdbWinUsbApi.dll" goto v2f
-IF NOT EXIST "%MYFILES%\dmtracedump.exe" goto v2f
-IF NOT EXIST "%MYFILES%\etc1tool.exe" goto v2f
 IF NOT EXIST "%MYFILES%\fastboot.exe" goto v2f
-IF NOT EXIST "%MYFILES%\hprof-conv.exe" goto v2f
-IF NOT EXIST "%MYFILES%\make_f2fs.exe" goto v2f
-IF NOT EXIST "%MYFILES%\mke2fs.conf" goto v2f
-IF NOT EXIST "%MYFILES%\mke2fs.exe" goto v2f
-IF NOT EXIST "%MYFILES%\source.properties" goto v2f
-IF NOT EXIST "%MYFILES%\sqlite3.exe" goto v2f
+IF NOT EXIST "%MYFILES%\download.exe" goto v2f
 cls
 goto wlcm2
 
@@ -903,6 +897,26 @@ echo Operation cancelled.
 echo Where: %opcode%
 echo.
 goto menu
+
+:: This is the startup mechanism for the cmd startup configuration
+:: Triggered by startup on line 644~
+:premenu
+IF EXIST "%tempdir%\SuroADB\sroadbstt.bat" CALL "%tempdir%\SuroADB\sroadbstt.bat"
+IF /i %startupcmd%==menu goto clsmenu
+IF /i %startupcmd%==devices goto op1
+IF /i %startupcmd%==install goto op2
+IF /i %startupcmd%==uninstall goto op3
+IF /i %startupcmd%==packages goto op4
+IF /i %startupcmd%==pull goto op5
+IF /i %startupcmd%==push goto op6
+IF /i %startupcmd%==screenshot goto op51
+IF /i %startupcmd%==screenrecord goto op52
+IF /i %startupcmd%==poweroff goto op7
+IF /i %startupcmd%==reboot goto op8
+IF /i %startupcmd%==adb goto sandbox1
+IF /i %startupcmd%==shell goto shellmode
+IF /i %startupcmd%==wifi goto wirels
+goto clsmenu
 
 
 :clsmenu
@@ -2085,11 +2099,6 @@ IF /i %helpnemu%==wifi goto whelp
 cls
 goto chelpmenu
 
-
-
-
-
-
 :whelp
 cls
 echo Help : "wifi"
@@ -2217,7 +2226,15 @@ goto helpmenu
 cls
 echo Closing adb.exe ...
 taskkill /F /IM adb.exe
+IF EXIST "%tempdir%\SuroADB\rlogdel.txt" goto exitp2
 exit
+
+:exitp2
+echo Deleting runtime log..
+IF EXIST "%tempdir%\SuroADB\sroadb-runtime.txt" DEL /Q "%tempdir%\SuroADB\sroadb-runtime.txt"
+cls
+exit
+
 
 :umenu
 cls
@@ -2242,6 +2259,7 @@ echo    debug
 echo    info
 echo    readme
 echo.
+echo    runtime
 echo    uninstall
 echo.
 echo    menu 
@@ -2262,6 +2280,7 @@ IF /i %srodb%==readme goto rdme
 IF /i %srodb%==troubleshoot goto trouble
 IF /i %srodb%==debug goto debugm
 IF /i %srodb%==uninstall goto srouninstall
+IF /i %srodb%==runtime goto runtimesettings
 goto suroadbm
 
 :csuroadbm
@@ -2280,8 +2299,8 @@ echo.
 echo    Readables:
 echo    info : readme
 echo.
-echo    Uninstall:
-echo    uninstall
+echo    Uninstall and Runtime:
+echo    uninstall : runtime
 echo.
 echo    menu 
 echo.
@@ -2301,7 +2320,97 @@ IF /i %srodb%==readme goto rdme
 IF /i %srodb%==troubleshoot goto trouble
 IF /i %srodb%==debug goto debugm
 IF /i %srodb%==uninstall goto srouninstall
+IF /i %srodb%==runtime goto runtimesettings
 goto suroadbm
+
+
+:runtimesettings
+IF NOT EXIST "%tempdir%\SuroADB\devchk.txt" set devstatus=ENABLE
+IF EXIST "%tempdir%\SuroADB\devchk.txt" set devstatus=DISABLE
+IF NOT EXIST "%tempdir%\SuroADB\rlogdel.txt" set rlogstatus=ENABLE
+IF EXIST "%tempdir%\SuroADB\rlogdel.txt" set rlogstatus=DISABLE
+IF NOT EXIST "%tempdir%\SuroADB\sroadbstt.bat" (
+echo set startupcmd=menu
+echo exit /b
+) > "%tempdir%\SuroADB\sroadbstt.bat"
+IF EXIST "%tempdir%\SuroADB\sroadbstt.bat" call "%tempdir%\SuroADB\sroadbstt.bat"
+cls
+echo SuroADB Runtime\Startup settings
+echo.
+echo  Note: Enabling or disabling these settings may improve
+echo  startup time at the cost of slower operations on first run
+echo.
+echo   sta - Configure what command to start on startup (%startupcmd%)
+echo.
+echo   dev - %devstatus% runtime adb devices check
+echo   rlog - %rlogstatus% deletion of runtime-logs.txt on exit
+echo.
+echo menu
+echo.
+set /p runtimeset= : 
+cls
+IF /i %runtimeset%==dev goto devchecksw
+IF /i %runtimeset%==rlog goto rlogsw
+IF /i %runtimeset%==sta goto staconf
+IF /i %runtimeset%==menu goto suroadbm
+goto runtimesettings
+
+:staconf
+IF EXIST "%tempdir%\SuroADB\sroadbstt.bat" call "%tempdir%\SuroADB\sroadbstt.bat"
+cls
+echo Configure what command SuroADB will start by default
+echo.
+echo  Currently starting : %startupcmd%
+echo.
+echo   menu (default) : devices : install : uninstall : packages
+echo   pull : push : screenshot : screenrecord
+echo.
+echo   poweroff : reboot
+echo.
+echo   adb : shell : wifi
+echo.
+echo   back (return to menu)
+echo.
+set /p stacmd= : 
+cls
+IF /i %stacmd%==menu goto staconf2
+IF /i %stacmd%==devices goto staconf2
+IF /i %stacmd%==install goto staconf2
+IF /i %stacmd%==uninstall goto staconf2
+IF /i %stacmd%==packages goto staconf2
+IF /i %stacmd%==pull goto staconf2
+IF /i %stacmd%==push goto staconf2
+IF /i %stacmd%==screenshot goto staconf2
+IF /i %stacmd%==screenrecord goto staconf2
+IF /i %stacmd%==poweroff goto staconf2
+IF /i %stacmd%==reboot goto staconf2
+IF /i %stacmd%==adb goto staconf2
+IF /i %stacmd%==shell goto staconf2
+IF /i %stacmd%==wifi goto staconf2
+IF /i %stacmd%==back goto runtimesettings
+goto staconf
+
+:staconf2
+cls
+(
+echo set startupcmd=%stacmd%
+echo exit /b
+) > "%tempdir%\SuroADB\sroadbstt.bat"
+ping localhost -n 2 >nul
+goto staconf
+
+
+
+:devchecksw
+IF %devstatus%==ENABLE DEL /Q "%tempdir%\SuroADB\devchk.txt"
+IF %devstatus%==DISABLE echo this will disable adb devices check on runtime > "%tempdir%\SuroADB\devchk.txt"
+goto runtimesettings
+:rlogsw
+IF %rlogstatus%==ENABLE echo this will delete the runtime log on exit > "%tempdir%\SuroADB\rlogdel.txt"
+IF %rlogstatus%==DISABLE DEL /Q "%tempdir%\SuroADB\rlogdel.txt"
+goto runtimesettings
+
+
 
 
 :uisettings
@@ -2340,7 +2449,7 @@ echo Be noted that the pre-compiled files will be extracted again if
 echo SuroADB is started.
 echo.
 echo.
-set /p unprompt=Y / N : 
+set /p unprompt= Y / N : 
 cls
 IF /i %unprompt%==Y goto srouninstall2
 IF /i %unprompt%==N goto suroadbm
@@ -2350,7 +2459,7 @@ cls
 echo Are you sure? All data and preferences will be deleted!
 echo.
 echo.
-set /p unpromptq=Y / N : 
+set /p unpromptq= Y / N : 
 cls
 IF /i %unpromptq%==Y goto srouninstall3
 IF /i %unpromptq%==N goto suroadbm
@@ -2366,22 +2475,23 @@ echo A3 Closing download.exe (update checker process)
 taskkill /F /IM download.exe >nul
 echo A4 Closing download.exe (2)
 taskkill /F /IM download.exe >nul
-ping localhost 3 -n >nul
+ping localhost -n 3 >nul
 echo B1 Deleting adb resources
 DEL /Q "%MYFILES%\adb.exe"
 DEL /Q "%MYFILES%\AdbWinApi.dll"
 DEL /Q "%MYFILES%\AdbWinUsbApi.dll"
-DEL /Q "%MYFILES%\dmtracedump.exe"
 DEL /Q "%MYFILES%\download.exe"
-DEL /Q "%MYFILES%\etc1tool.exe"
 DEL /Q "%MYFILES%\fastboot.exe"
-DEL /Q "%MYFILES%\hprof-conv.exe"
-DEL /Q "%MYFILES%\libwinpthread-1.dll"
-DEL /Q "%MYFILES%\make_f2fs.exe"
-DEL /Q "%MYFILES%\mke2fs.exe"
-DEL /Q "%MYFILES%\mke2fs.conf"
-DEL /Q "%MYFILES%\source.properties"
-DEL /Q "%MYFILES%\sqlite3.exe"
+echo B1.1 Deleting old adb resources
+IF EXIST "%MYFILES%\dmtracedump.exe" DEL /Q "%MYFILES%\dmtracedump.exe"
+IF EXIST "%MYFILES%\etc1tool.exe" DEL /Q "%MYFILES%\etc1tool.exe"
+IF EXIST "%MYFILES%\hprof-conv.exe" DEL /Q "%MYFILES%\hprof-conv.exe"
+IF EXIST "%MYFILES%\libwinpthread-1.dll" DEL /Q "%MYFILES%\libwinpthread-1.dll"
+IF EXIST "%MYFILES%\make_f2fs.exe" DEL /Q "%MYFILES%\make_f2fs.exe"
+IF EXIST "%MYFILES%\mke2fs.conf" DEL /Q "%MYFILES%\mke2fs.conf"
+IF EXIST "%MYFILES%\mke2fs.exe" DEL /Q "%MYFILES%\mke2fs.exe"
+IF EXIST "%MYFILES%\source.properties" DEL /Q "%MYFILES%\source.properties"
+IF EXIST "%MYFILES%\sqlite3.exe" DEL /Q "%MYFILES%\sqlite3.exe"
 echo B2 Deleting SuroADB resources
 DEL /Q "%MYFILES%\sroadb%filerawver%w.txt"
 DEL /Q "%MYFILES%\sroadbupdate.exe"
@@ -2395,6 +2505,7 @@ IF EXIST "%MYFILES%\updatechk.bat" DEL /Q "%MYFILES%\updatechk.bat"
 IF EXIST "%MYFILES%\sroadb-debug.txt" DEL /Q "%MYFILES%\sroadb-debug.txt"
 IF EXIST "%MYFILES%\sroadb-errorlog.txt" DEL /Q "%MYFILES%\sroadb-errorlog.txt"
 IF EXIST "%MYFILES%\sroadbdb.bat" DEL /Q "%MYFILES%\sroadbdb.bat"
+IF EXIST "%MYFILES%\sroadbverinfo.bat" DEL /Q "%MYFILES%\sroadbverinfo.bat"
 echo C1 Deleting temp data folder
 RD /S /Q "%tempdir%"
 echo C2 Deleting SuroADB settings and log file folder
@@ -2404,29 +2515,31 @@ echo D1 Checking
 IF EXIST "%MYFILES%\adb.exe" goto unerror
 IF EXIST "%MYFILES%\AdbWinApi.dll" goto unerror
 IF EXIST "%MYFILES%\AdbWinUsbApi.dll" goto unerror
-IF EXIST "%MYFILES%\dmtracedump.exe" goto unerror
 IF EXIST "%MYFILES%\download.exe" goto unerror
-IF EXIST "%MYFILES%\etc1tool.exe" goto unerror
 IF EXIST "%MYFILES%\fastboot.exe" goto unerror
+IF EXIST "%MYFILES%\dmtracedump.exe" goto unerror
+IF EXIST "%MYFILES%\etc1tool.exe" goto unerror
 IF EXIST "%MYFILES%\hprof-conv.exe" goto unerror
 IF EXIST "%MYFILES%\libwinpthread-1.dll" goto unerror
 IF EXIST "%MYFILES%\make_f2fs.exe" goto unerror
+IF EXIST "%MYFILES%\mke2fs.conf" goto unerror
 IF EXIST "%MYFILES%\mke2fs.exe" goto unerror
 IF EXIST "%MYFILES%\source.properties" goto unerror
-IF EXIST "%MYFILES%\sqlite3.exe" goto unerror
+IF EXIST "%MYFILES%\sqlite3.exe" DEL /Q goto unerror
 IF EXIST "%MYFILES%\sroadb%filerawver%w.txt" goto unerror
 IF EXIST "%MYFILES%\sroadbupdate.exe" goto unerror
 IF EXIST "%MYFILES%\sroadbupdateui.bat" goto unerror
 IF EXIST "%MYFILES%\readme-help.txt" goto unerror
 IF EXIST "%MYFILES%\updtstop.txt" goto unerror
 IF EXIST "%MYFILES%\updatechk.bat" goto unerror
+IF EXIST "%MYFILES%\sroadbdb.bat" goto unerror
 IF EXIST "%MYFILES%\sroadb-debug.txt" goto unerror
 IF EXIST "%MYFILES%\sroadb-errorlog.txt" goto unerror
 IF EXIST "%MYFILES%\sroadbbetaui.bat" goto unerror
 IF EXIST "%MYFILES%\SuroADB!Beta.exe" goto unerror
+IF EXIST "%MYFILES%\sroadbverinfo.bat" goto unerror
 IF EXIST "%tempdir%" goto unerror
 IF EXIST "%audir%" goto unerror
-IF EXIST "%MYFILES%\sroadbdb.bat" goto unerror
 goto undone
 :undone
 title Goodbye :(
@@ -2442,9 +2555,10 @@ exit
 :unerror
 echo An error has occured while deleting a file/folder!
 echo.
-echo Delete remaining files manually, or retry uninstall process.
+echo Delete remaining files manually, or retry the uninstall process.
 echo.
-start "%MYFILES%"
+IF EXIST "%MYFILES%\SuroADB!Beta.exe" echo To delete SuroADB!Beta, exit SuroADB first.
+start "%SystemRoot%\explorer.exe" "%MYFILES%"
 pause
 exit
 
@@ -2454,9 +2568,9 @@ cls
 :troble2
 echo What should be fixed?
 echo.
-echo  cd  : 'adb is not recognized as an internal command'
-echo  rd  : change working directory
-echo  xx  : revert to default working directory
+echo  CD : 'adb is not recognized as an internal command'
+echo  RD : change working directory
+echo  XX  : revert to default working directory
 echo.
 echo  ex  : return to menu
 set /p troubles= : 
@@ -2471,7 +2585,7 @@ goto trouble
 cls
 cd "%MYFILES%"
 echo Working directory set to %MYFILES%
-DEL /Q "%audir%D\sroadbcd.bat"
+DEL /Q "%audir%\sroadbcd.bat"
 goto trouble
 
 :repathq
@@ -2692,6 +2806,9 @@ IF EXIST "%audir%\sroadbsspath.bat" echo ssv - Screenshot remember save path dia
 IF EXIST "%audir%\sroadbsdconfig.bat" echo sd - Internal storage path config
 IF EXIST "%audir%\sroadbexsdconfig.bat" echo ex - External storage path config
 IF EXIST "%MYFILES%\updtstop.txt" echo udt - Update checking
+IF EXIST "%tempdir%\SuroADB\devchk.txt" echo dev - Runtime adb devices check
+IF EXIST "%tempdir%\SuroADB\rlogdel.txt" echo rlog - Runtime log deletion on exit
+
 echo all - Set everything as default
 echo.
 echo.
@@ -2712,6 +2829,8 @@ IF /i %def11%==ppu DEL /Q "%audir%\sroadbexportpk.bat"
 IF /i %def11%==sd DEL /Q "%audir%\sroadbsdconfig.bat"
 IF /i %def11%==ex DEL /Q "%audir%\sroadbexsdconfig.bat"
 IF /i %def11%==udt DEL /Q "%MYFILES%\updtstop.txt"
+IF /i %def11%==dev DEL /Q "%tempdir%\SuroADB\devchk.txt"
+IF /i %def11%==rlog DEL /Q "%tempdir%\SuroADB\rlogdel.txt"
 IF /i %def11%==all goto def12
 IF /i %def11%==menu goto suroadbm
 :restt
@@ -2748,7 +2867,13 @@ IF EXIST "%MYFILES%\updtstop.txt" DEL /Q "%MYFILES%\updtstop.txt"
 IF EXIST "%audir%\sroadbsdconfig.bat" echo Internal storage path config reset
 IF EXIST "%audir%\sroadbsdconfig.bat" DEL /Q "%audir%\sroadbsdconfig.bat"
 IF EXIST "%audir%\sroadbexsdconfig.bat" echo External storage path config reset
-IF EXIST "%audir%\sroadbexsdconfig.bat" DEL /Q "%audir%\sroadbexsdconfig.bat"
+IF EXIST "%audir%\sroadbexsdconfig.bat" DEL /Q "%audir%\sroadbexsdconfig.bat
+IF EXIST "%tempdir%\SuroADB\devchk.txt" echo Runtime adb devices check enabled
+IF EXIST "%tempdir%\SuroADB\devchk.txt" DEL /Q "%tempdir%\SuroADB\devchk.txt"
+IF EXIST "%tempdir%\SuroADB\rlogdel.txt" echo Runtime log deletion disabled
+IF EXIST "%tempdir%\SuroADB\rlogdel.txt" DEL /Q "%tempdir%\SuroADB\rlogdel.txt"
+IF /i %def11%==dev DEL /Q "%tempdir%\SuroADB\devchk.txt"
+IF /i %def11%==rlog DEL /Q "%tempdir%\SuroADB\rlogdel.txt"
 goto restt
 
 
@@ -2794,8 +2919,8 @@ goto interfacemenu
 
 
 :updt
-IF EXIST "%wdre%\updtstop.txt" set updtst=ON
-IF NOT EXIST "%wdre%\updtstop.txt" set updtst=OFF
+IF EXIST "%wdre%\updtstop.txt" set updtst=ON (Currently OFF)
+IF NOT EXIST "%wdre%\updtstop.txt" set updtst=OFF (Currently ON)
 cls
 :updt1
 echo Update checking
@@ -2838,6 +2963,7 @@ start sroadbupdate.exe
 cls
 goto updt
 
+:: Some more personal stuff
 
 :faq
 IF EXIST "%tempdir%\SuroADB\sroadb-counter.bat" CALL "%tempdir%\SuroADB\sroadb-counter.bat"
