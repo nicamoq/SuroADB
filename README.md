@@ -26,11 +26,11 @@ a third-party bat-to-exe conversion software to work properly.</p>
 
 <strong>SuroADB!Beta.exe</strong>
 
-<p style="color:tomato;font:Roboto Thin;">Basically the latest version of SuroADB Beta, but without the pre-compiled adb resources. This can<br>be delivered on-the-fly to the new SuroADB BETA Update UI without additional manual download in this page. When downloaded and succesfully set up with the BETA UI, SuroADB will automatically start this version.</p>
+<p style="color:tomato;font:Roboto Thin;">Basically the latest version of SuroADB Beta, but without the pre-compiled adb resources. This can<br>be delivered on-the-fly to the new SuroADB BETA Update UI without additional manual download on this page. When downloaded and succesfully set up with the BETA UI, SuroADB will automatically start this version.</p>
 
 <strong>SuroADB.exe</strong>
 
-<p style="color:tomato;font:Roboto Thin;">This is the latest SuroADB BETA Release. Updates in unison with the RAW script.</p>
+<p style="color:tomato;font:Roboto Thin;">This is the latest SuroADB BETA Release. Updates in unison with the RAW script and perhaps the SuroADB!Beta client too. It is recommended to download this after certain pre-compiled files are updated due to this containing the latest version of those files.</p>
 
 <strong>changelogbeta.txt</strong>
 
