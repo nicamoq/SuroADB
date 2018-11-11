@@ -88,3 +88,11 @@ ex. Runtime adb devices, Runtime log and directory configurations
 :: SuroADB 13 111018 (BETA B)
 - updated sroadbupdate.exe to detect old versions to not trigger an "update found" message for them
 - sroadbupdate.exe now relies on a single file to detect version info
+
+:: SuroADB 13 111118 (BETA C)
+- added options for runtime (startup) in settings
+ |- configure what command SuroADB starts after startup
+ |- option to disable adb devices check to improve startup speed
+ |- option to delete runtime logs after exit (via exit command)
+- removed some adb dependencies as they're not dependencies at all, this also improves startup speed
+- minor ui tweaks for settings
