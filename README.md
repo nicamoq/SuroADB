@@ -43,12 +43,11 @@ SuroADB's update checker. This can help auto correct errors when inputs are made
 
 <strong>sroadbupdate (Raw).bat</strong>
 
-<p style="color:tomato;font:Roboto Thin;">Latest RAW Source Code of SuroADB's very own update checker. Updates in unison
-with each SuroADB release.</p>
+<p style="color:tomato;font:Roboto Thin;">Latest RAW Source Code of SuroADB's very own update checker. Partaining to SuroADB 13 BETA B, the update checker now relies on a single file to fetch client version and then compare that to updatechk.bat</p>
 
 <strong>updatechk.bat (LIVE)</strong>
 
 <p style="color:tomato;font:Roboto Thin;">Contains new version information and description. Always downloaded by SuroADB's
-update checker as well.</p>
+update checker.</p>
 
 </html>
