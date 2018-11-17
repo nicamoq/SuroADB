@@ -96,3 +96,6 @@ ex. Runtime adb devices, Runtime log and directory configurations
  |- option to delete runtime logs after exit (via exit command)
 - removed some adb dependencies as they're not dependencies at all, this also improves startup speed
 - minor ui tweaks for settings
+
+:: SuroADB 13 111718 (BETA D)
+- fixed runtime settings' adb devices setting not working
