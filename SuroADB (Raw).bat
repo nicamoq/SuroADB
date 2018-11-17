@@ -3,8 +3,8 @@
 set version=13
 set newver=%version%
 set rawver=13
-set betabuild=13C
-set betabuildno=13C
+set betabuild=13D
+set betabuildno=13D
 set filerawver=13
 set diode=f0
 set logst=YES
@@ -2325,8 +2325,8 @@ goto suroadbm
 
 
 :runtimesettings
-IF NOT EXIST "%tempdir%\SuroADB\devchk.txt" set devstatus=ENABLE
-IF EXIST "%tempdir%\SuroADB\devchk.txt" set devstatus=DISABLE
+IF NOT EXIST "%tempdir%\SuroADB\devchk.txt" set devstatus=DISABLE
+IF EXIST "%tempdir%\SuroADB\devchk.txt" set devstatus=ENABLE
 IF NOT EXIST "%tempdir%\SuroADB\rlogdel.txt" set rlogstatus=ENABLE
 IF EXIST "%tempdir%\SuroADB\rlogdel.txt" set rlogstatus=DISABLE
 IF NOT EXIST "%tempdir%\SuroADB\sroadbstt.bat" (
