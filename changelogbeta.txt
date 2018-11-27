@@ -100,3 +100,6 @@ ex. Runtime adb devices, Runtime log and directory configurations
 :: SuroADB 13 111718 (BETA D)
 - fixed and suroadbbetaui.bat missing file bug
 - fixed runtime settings' adb devices setting not working
+
+:: SuroADB 13 112518 (BETA E) (REL)
+- fixed runtime settings' adb devices setting not working (for logs)
