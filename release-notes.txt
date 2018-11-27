@@ -4,9 +4,9 @@ SuroADB Release Notes          kutsuro.simdif.com | suroadb.jimdofree.com
 Latest:
 11/28/18 - 13 December!
               - added options for runtime (startup) in settings
-               |- configure what command SuroADB starts after startup
-               |- option to disable adb devices check to improve startup speed
-               |- option to delete runtime logs after exit (via exit command)
+               • configure what command SuroADB starts after startup
+               • option to disable adb devices check to improve startup speed
+               • option to delete runtime logs after exit (via exit command)
               - fixed a minor ui mistake for file pull
               - minor improvements to file push ui
               - minor ui tweaks for settings
