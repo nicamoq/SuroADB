@@ -2,6 +2,28 @@
 SuroADB Release Notes          kutsuro.simdif.com | suroadb.jimdofree.com
 ====================================================================================
 Latest:
+11/28/18 - 13 December!
+              - added options for runtime (startup) in settings
+               |- configure what command SuroADB starts after startup
+               |- option to disable adb devices check to improve startup speed
+               |- option to delete runtime logs after exit (via exit command)
+              - fixed a minor ui mistake for file pull
+              - minor improvements to file push ui
+              - minor ui tweaks for settings
+              - reverted platform-tools to that of SuroADB 11.1 due to compatibility issues like getting stuck in mid-pull operation
+                and mismatching adb server
+              - removed some adb dependencies as they're not dependencies at all, this also improves startup speed
+
+              It's been almost 3 weeks since the last release. But i've been continously updating and releasing
+              BETA SuroADB versions. This beta program for SuroADB makes my worktime limits and bug fixes work together
+              and reduce my own workload, and i'm damn glad that I made it this way!
+              
+              The next release may be released late next month, but BETA updates will come early.
+              
+              Advanced merry christmas, everybody! 
+
+
+
 11/4/18 - 12.1 End of sembreak
               - now hosted on GitHub!
               - added support for BETA version fetching
