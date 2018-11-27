@@ -3,8 +3,8 @@
 set version=13
 set newver=%version%
 set rawver=13
-set betabuild=13D
-set betabuildno=13D
+set betabuild=13E
+set betabuildno=13E
 set filerawver=13
 set diode=f0
 set logst=YES
@@ -357,7 +357,7 @@ goto stt2
 echo =============================================
 echo.
 echo SuroADB : %version% %betabuild% started %TIME% %DATE%
-adb devices
+IF NOT EXIST "%tempdir%\SuroADB\devchk.txt" adb devices
 IF EXIST "%audir%\deviceip.bat" echo %TIME% %DATE% ADB connected to %wirelesip%:5555
 echo.
 ) >> "%audir%\sroadb-logs.txt"
@@ -1446,7 +1446,7 @@ goto op33
 :op33
 echo Enter the package name. ex. com.test.app
 echo enter menu to go back to menu
-echo 
+echo.
 echo.
 set /p unpackage= : 
 cls
@@ -2475,6 +2475,10 @@ echo A3 Closing download.exe (update checker process)
 taskkill /F /IM download.exe >nul
 echo A4 Closing download.exe (2)
 taskkill /F /IM download.exe >nul
+echo A5 Closing SuroADB.exe (SuroADB process)
+taskkill /F /IM SuroADB.exe
+echo A5 Closing SuroADB.exe (2)
+taskkill /F /IM SuroADB.exe
 ping localhost -n 3 >nul
 echo B1 Deleting adb resources
 DEL /Q "%MYFILES%\adb.exe"
@@ -2498,7 +2502,7 @@ DEL /Q "%MYFILES%\sroadbupdate.exe"
 DEL /Q "%MYFILES%\sroadbupdateui.bat"
 DEL /Q "%MYFILES%\readme-help.txt"
 DEL /Q "%MYFILES%\sroadbbetaui.bat"
-DEL /Q "%MYFILES%\SuroADB!Beta.exe"
+IF EXIST "%MYFILES%\SuroADB!Beta.exe" DEL /Q "%MYFILES%\SuroADB!Beta.exe"
 echo B3 Deleting external SuroADB data
 IF EXIST "%MYFILES%\updtstop.txt" DEL /Q "%MYFILES%\updtstop.txt"
 IF EXIST "%MYFILES%\updatechk.bat" DEL /Q "%MYFILES%\updatechk.bat"
@@ -2556,8 +2560,8 @@ exit
 echo An error has occured while deleting a file/folder!
 echo.
 echo Delete remaining files manually, or retry the uninstall process.
-echo.
 IF EXIST "%MYFILES%\SuroADB!Beta.exe" echo To delete SuroADB!Beta, exit SuroADB first.
+echo.
 start "%SystemRoot%\explorer.exe" "%MYFILES%"
 pause
 exit
@@ -2618,10 +2622,8 @@ echo.
 echo Change it now?
 echo.
 set /p rpth= Y / N : 
-IF %rpth%==y goto repath2
-IF %rpth%==Y goto repath2
-IF %rpth%==n goto trouble
-IF %rpth%==N goto trouble
+IF /i %rpth%==Y goto repath2
+IF /i %rpth%==N goto trouble
 goto repath1
 
 :repath2
@@ -2709,10 +2711,8 @@ echo.
 echo Before continuing, please make sure your device is ready for ADB usage.
 echo.
 set /p debugp=Y / X : 
-IF %debugp%==Y goto debugm1
-IF %debugp%==y goto debugm1
-IF %debugp%==X goto suroadbm
-IF %debugp%==x goto suroadbm
+IF /i %debugp%==Y goto debugm1
+IF /i %debugp%==X goto suroadbm
 goto debugm
 
 
