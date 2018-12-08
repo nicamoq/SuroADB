@@ -1,13 +1,16 @@
 @echo off
+mode con: cols=58lines=15
 CD %MYFILES%
 cls
 title SuroADB Update Checker
-color f0
+color 0f
 set rawver=
 set newver=
 set filerawver=
 set betabuild=
 set betabuildno=
+set ov=0
+set bv=0
 IF EXIST "%MYFILES%\sroadbverinfo.bat" CALL "%MYFILES%\sroadbverinfo.bat"
 IF NOT EXIST "%MYFILES%\sroadbverinfo.bat" goto missingverinfo
 set tempdir=%MYFILES%\sroadbtemp
@@ -46,21 +49,7 @@ goto cont
 :cont
 IF EXIST "%MYFILES%\sroadbtemp\Update\updatechk.bat" call "%MYFILES%\sroadbtemp\Update\updatechk.bat"
 IF NOT EXIST "%MYFILES%\sroadbtemp\Update\updatechk.bat" goto not
-
-:: Old version detector
-IF %rawver%==70 goto updtno
-IF %rawver%==71 goto updtno
-IF %rawver%==80 goto updtno
-IF %rawver%==81 goto updtno
-IF %rawver%==90 goto updtno
-IF %rawver%==91 goto updtno
-IF %rawver%==10 goto updtno
-IF %rawver%==101 goto updtno
-IF %rawver%==11 goto updtno
-IF %rawver%==111 goto updtno
-IF %rawver%==12 goto updtno
-IF %rawver%==121 goto updtno
-
+IF %ov%==1 goto updtno
 IF NOT %rawver%==%filerawver% goto av
 IF NOT %betabuild%==%betabuildno% goto bv
 IF %rawver%==%filerawver% goto updtno
@@ -80,6 +69,7 @@ start "%SystemRoot%\cmd.exe" "%MYFILES%\sroadbupdateui.bat"
 exit
 
 :bv
+IF %bv%==1 exit
 taskkill /F /IM download.exe
 set newbuild=%betabuild%
 IF EXIST "%tempdir%\SuroADB\betabuild.bat" CALL "%tempdir%\SuroADB\betabuild.bat"
