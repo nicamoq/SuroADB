@@ -103,3 +103,10 @@ ex. Runtime adb devices, Runtime log and directory configurations
 
 :: SuroADB 13 112518 (BETA E) (REL)
 - fixed runtime settings' adb devices setting not working (for logs)
+
+:: SuroADB 13.1 12818 (BETA A)
+- added a workaround for file push filename error!
+ |- can detect if file has spaces
+ |- switches to workaround that copies the folder (Push) containing the file to directory of your choosing
+- updated and improved sroadbupdate.exe old version detection
+- updated sroadbupdateui.bat to display more lines
