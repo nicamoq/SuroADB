@@ -1630,6 +1630,7 @@ set pushfvar=%result%
 echo Copying file to a temp folder.. This helps detect errors..
 COPY /Y "%result%" "%wdre%\sroadbtemp\Push" >nul
 IF EXIST "%wdre%\sroadbtemp\Push\%pusname%" goto pushnative2
+ping localhost -n 3 >nul
 echo File name error has been found, switching to workaround..
 COPY /Y "%puspath%%pusname%" "%wdre%\sroadbtemp\Push" >nul
 IF NOT EXIST "%wdre%\sroadbtemp\Push\%pusname%" goto puserror0
@@ -1668,20 +1669,20 @@ cls
 echo A folder named "Push" will be copied to the path
 echo you entered.
 echo.
-echo This folder will contain %pusname%.
+echo This folder will contain "%pusname%".
 echo.
 echo Enter the path to where the folder should go.
-echo ex. /sdcard
+echo ex. %sdconfig%
 echo.
 echo.
-set /p push404= : 
+set /p pushf= : 
 cls
 IF EXIST "%tempdir%\db\sroadbdb.bat" call "%tempdir%\db\sroadbdb.bat"
 ping localhost -n 2 >nul
 cls
 echo Copying : %tempdir%\Push (contains %pusname%)
-echo To : %push404%
-adb push "%tempdir%\Push" "%push404%"
+echo To : %pushf%
+adb push "%tempdir%\Push" "%pushf%"
 IF %logst%==YES echo %TIME% %DATE% "%pusname%" copied to "%pushf%/Push" via Workaround. >> "%audir%\sroadb-logs.txt"
 IF EXIST "%tempdir%\Push" RD /S /Q "%tempdir%\Push"
 IF NOT EXIST "%tempdir%\Push" MKDIR "%tempdir%\Push"
