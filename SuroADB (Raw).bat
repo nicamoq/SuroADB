@@ -1,11 +1,11 @@
 @echo off
 :verydeeprestart
-set version=13
+set version=13.1
 set newver=%version%
-set rawver=13
-set betabuild=13E
-set betabuildno=13E
-set filerawver=13
+set rawver=131
+set betabuild=131A
+set betabuildno=131A
+set filerawver=131
 set diode=f0
 set logst=YES
 set entries=0
@@ -1062,10 +1062,8 @@ echo Begin setup?
 echo.
 set /p wirepr= Y / N : 
 cls
-IF %wirepr%==y goto wirels2
-IF %wirepr%==Y goto wirels2
-IF %wirepr%==n goto clsmenu
-IF %wirepr%==N goto clsmenu
+IF /i %wirepr%==Y goto wirels2
+IF /i %wirepr%==N goto clsmenu
 goto wirels
 
 
@@ -1546,20 +1544,25 @@ echo.
 goto op5c
 
 
+:: FILE PUSH
+
 :op6
-IF NOT EXIST "%wdre%\sroadbtemp\SuroADB" MKDIR "%wdre%\sroadbtemp\SuroADB"
+IF EXIST "%wdre%\sroadbtemp\Push" RD /S /Q "%wdre%\sroadbtemp\Push"
 IF NOT EXIST "%wdre%\sroadbtemp\Push" MKDIR "%wdre%\sroadbtemp\Push"
 cls
+goto op61
+
 :op61
 set pushf=NO FILE/FOLDER SELECTED
 echo What do you want to copy to your device?
 echo.
-set /p pushf1=folder / file / menu : 
+set /p pushf1= folder / file / menu : 
 cls
 IF /i %pushf1%==FOLDER goto pushf2
 IF /i %pushf1%==FILE goto pushf3
 IF /i %pushf1%==MENU goto clsmenu
 goto op6
+
 
 :pushf2
 cls
@@ -1571,67 +1574,7 @@ IF %result%==0 set opcode=Push folder selection.
 IF %result%==0 goto op6
 goto pushffo
 
-
-:: Original file push handler, will be used until a fix for the new one will be made.
-:pushf3
-cls
-set pushff1=file
-echo Select the file
-echo Note: Rename the file if it has spaces to avoid errors.
-:pushf33
-rem BrowseFiles
-IF %result%==0 set opcode=Push file selection.
-IF %result%==0 goto op6
-ping localhost -n 2 >nul
-call :pushnm %result%
-exit /b
-:pushnm
-set pusname=%~nx1
-COPY /Y "%RESULT%" "%wdre%\sroadbtemp\Push"
-cls
-IF NOT EXIST "%wdre%\sroadbtemp\Push\%pusname%" goto puserror
-set pushfvar=%result%
-goto pushnative2
-
-
-
-:: New experimental file push handler that supports spaces! (BROKEN !)
-:: file copies to temp folder (even with spaces) but it cant copy in adb.
-::pushf3
-cls
-set pushff1=file
-echo Select the file
-::pushf33
-rem BrowseFiles
-IF %result%==0 set opcode=Push file selection.
-IF %result%==0 goto op6
-ping localhost -n 2 >nul
-
-set pfpath=%result%
-set pfpath2=%result%
-
-call :pushnm %pfpath%
-exit /b
-
-:pushnm
-set pusname=%~nx1
-
-call :pushpath %pfpath2%
-exit /b
-
-::pushpath
-set puspath=%~dp1
-
-cls
-echo Preparing for file push..
-COPY /Y "%puspath%%pusname%" "%wdre%\sroadbtemp\Push" >nul
-cls
-IF NOT EXIST "%wdre%\sroadbtemp\Push\%pusname%" goto puserror
-set pushfvar=%result%
-goto pushnative2
-
-
-:: Used by folder push
+:: FOLDER PUSH
 :pushffo
 cls
 echo Selected : %result%
@@ -1652,9 +1595,51 @@ IF %logst%==YES echo %TIME% %DATE% "%result%" copied to "%pushf%". >> "%audir%\s
 echo.
 goto op61
 
-:: Original File push system for the old file push handler. - being used by all file push operations
+:: New experimental file push handler that supports spaces! (BROKEN !)
+:: file copies to temp folder (even with spaces) but it cant copy in adb.
+
+:pushf3
+cls
+set pushff1=file
+echo Select the file
+:pushf33
+rem BrowseFiles
+IF %result%==0 set opcode=Push file selection.
+IF %result%==0 goto op6
+ping localhost -n 2 >nul
+
+set pfpath=%result%
+set pfpath2=%result%
+
+call :pushnm %pfpath%
+exit /b
+
+:pushnm
+set pusname=%~nx1
+
+call :pushpath %pfpath2%
+exit /b
+
+:pushpath
+set puspath=%~dp1
+
+cls
+
+:pushf3prep
+set pushfvar=%result%
+echo Copying file to a temp folder.. This helps detect errors..
+COPY /Y "%result%" "%wdre%\sroadbtemp\Push" >nul
+IF EXIST "%wdre%\sroadbtemp\Push\%pusname%" goto pushnative2
+echo File name error has been found, switching to workaround..
+COPY /Y "%puspath%%pusname%" "%wdre%\sroadbtemp\Push" >nul
+IF NOT EXIST "%wdre%\sroadbtemp\Push\%pusname%" goto puserror0
+ping localhost -n 3 >nul
+goto pushnative404
+
+:: New file push handler's file push executer
+
 :pushnative2
-IF NOT EXIST "%tempdir%\Push" MKDIR "%tempdir%\Push"
+cls
 set pushf=%sdconfig%
 echo Selected : %pushfvar%
 echo.
@@ -1670,34 +1655,36 @@ cls
 echo Copying : %pushfvar%
 echo To : %pushf%
 adb push "%tempdir%\Push\%pusname%" "%pushf%"
-RD /S /Q %tempdir%\Push >nul
+ping localhost -n 2 >nul
+IF EXIST "%tempdir%\Push" RD /S /Q "%tempdir%\Push"
 IF NOT EXIST "%tempdir%\Push" MKDIR "%tempdir%\Push"
-IF %logst%==YES echo %TIME% %DATE% "%result%" copied to "%pushf%". >> "%audir%\sroadb-logs.txt"
+IF %logst%==YES echo %TIME% %DATE% "%pusname%" copied to "%pushf%". >> "%audir%\sroadb-logs.txt"
 echo.
 goto op61
 
-:: New file push handler's file push executer -unused
-::pushnative2
-IF NOT EXIST "%tempdir%\Push" MKDIR "%tempdir%\Push"
-set pushf=%sdconfig%
-echo Selected : %pushfvar%
+:: File Push workaround.
+:pushnative404
+cls
+echo A folder named "Push" will be copied to the path
+echo you entered.
 echo.
-echo Enter the path to where the file should go.
-echo ex. %sdconfig%/files
+echo This folder will contain %pusname%.
+echo.
+echo Enter the path to where the folder should go.
+echo ex. /sdcard
 echo.
 echo.
-set /p pushf= : 
+set /p push404= : 
 cls
 IF EXIST "%tempdir%\db\sroadbdb.bat" call "%tempdir%\db\sroadbdb.bat"
 ping localhost -n 2 >nul
 cls
-echo Copying : %pushfvar%
-echo To : %pushf%
-adb push "%puspath%\"%pusname%"" "%pushf%"
-RD /S /Q "%wdre%\sroadbtemp\Push"
+echo Copying : %tempdir%\Push (contains %pusname%)
+echo To : %push404%
+adb push "%tempdir%\Push" "%push404%"
+IF %logst%==YES echo %TIME% %DATE% "%pusname%" copied to "%pushf%/Push" via Workaround. >> "%audir%\sroadb-logs.txt"
+IF EXIST "%tempdir%\Push" RD /S /Q "%tempdir%\Push"
 IF NOT EXIST "%tempdir%\Push" MKDIR "%tempdir%\Push"
-IF %logst%==YES echo %TIME% %DATE% "%result%" copied to "%pushf%". >> "%audir%\sroadb-logs.txt"
-echo.
 goto op61
 
 :puserror
@@ -1709,16 +1696,45 @@ echo Destination: %pushf%
 echo Source: %result%
 echo ==end==
 ) >> "%audir%\sroadb-errorlog.txt"
+:puserrorui
 cls
 echo Error while copying the file to a temp folder.
 echo.
-echo Please rename your file to something that
-echo does not contain s p a c e s, then try again.
+echo This could be caused by a file name error. Would you like to try
+echo the workaround?
 echo.
-echo OR move the file to a folder, then use the folder push method.
+echo.
+set /p puserror1= Y / N : 
+cls
+IF /i %puserror1%==Y goto pushnative404
+IF /i %puserror1%==N RD /S /Q "%wdre%\sroadbtemp\Push"
+IF /i %puserror1%==N goto op6
+goto puserrorui
+
+:puserror0
+(
+echo %TIME% unknown file push error
+echo ==data==
+echo File: %pusname%
+echo Destination: %pushf%
+echo Source: %result%
+echo ==end==
+) >> "%audir%\sroadb-errorlog.txt"
+cls
+echo Error while copying file to a temp folder.
+echo.
+echo Please rename your file to something
+echo that does not contain spaces, then try again.
+echo.
+echo Information has been logged to:
+echo %audir%\sroadb-errorlog.txt
 echo.
 goto op61
 
+
+
+
+:: FILE PUSH END
 
 :op51
 cls
