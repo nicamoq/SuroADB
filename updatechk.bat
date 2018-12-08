@@ -1,6 +1,6 @@
  set newver=13
 set rawver=13
-set betabuild=13E
+set betabuild=131A
 set linea===========================================================
 set lineb=Notes:
 set linec= - Reverted platform-tools to that of SuroADB 11.1 due to issues
