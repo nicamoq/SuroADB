@@ -3,8 +3,8 @@
 set version=13.1
 set newver=%version%
 set rawver=131
-set betabuild=131A
-set betabuildno=131A
+set betabuild=131B
+set betabuildno=131B
 set filerawver=131
 set diode=f0
 set logst=YES
@@ -485,45 +485,39 @@ goto restore
 :: have wrong commands in them.
 :restore
 IF %rest%==cols DEL /Q "%audir%\sroadbcol.bat"
-IF %rest%==cols echo %TIME% color value "%diode%" has set ERRORLEVEL to 1. >> "%audir%\sroadb-errorlog.txt"
+IF %rest%==cols echo %TIME% %DATE% color value "%diode%" has set ERRORLEVEL to 1. >> "%audir%\sroadb-errorlog.txt"
 IF %rest%==cols set diode=f0
 IF %rest%==cols goto interfacemenu
-IF %rest%==betabuildstarter echo %TIME% betabuild.bat was changed, but SuroADB!Beta.exe is missing. Restoring file.. > "%audir%\sroadb-errorlog.txt"
+IF %rest%==betabuildstarter echo %TIME% %DATE% betabuild.bat was changed, but SuroADB!Beta.exe is missing. Please don't modify betabuild.bat! >> "%audir%\sroadb-errorlog.txt"
 IF %rest%==betabuildstarter (
 echo set betabuild=%betabuildno%
 echo exit /b
 ) > "%tempdir%\SuroADB\betabuild.bat"
-IF %rest%==betabuildstarter echo %TIME% betabuild.bat restored to %betabuildno% compatibility. > "%audir%\sroadb-errorlog.txt"
+IF %rest%==betabuildstarter echo %TIME% %DATE% betabuild.bat restored to %betabuildno% compatibility. >> "%audir%\sroadb-errorlog.txt"
 IF %rest%==betabuildstarter goto verydeeprestart
 IF %rest%==customcd del /Q "%audir%\sroadbcd.bat"
-IF %rest%==customcd echo %TIME% invalid path "%sroadbcd%". >> "%audir%\sroadb-errorlog.txt"
+IF %rest%==customcd echo %TIME% %DATE% invalid path "%sroadbcd%". >> "%audir%\sroadb-errorlog.txt"
 IF %rest%==customcd goto verydeeprestart
 
 :restore1
-title SuroADB %version% : FATAL ERROR OCCURED
+title SuroADB %version% build %betabuildno% : FATAL ERROR OCCURED
 cls
 echo An error has occured that prevented SuroADB from doing something. 
 echo.
-echo In an attempt to fix it, SuroADB will delete automatic restore scripts in
+echo In an attempt to fix it, SuroADB will delete
 echo.
 echo %audir%
 echo.
-echo This will affect set custom directories, custom window color, and others.
+echo This will affect logs, settings, and others.
 echo.
 echo For more information, you may find something useful in:
 echo %audir%\sroadb-errorlog.txt
+echo Note: Only continue after you're done with the log files!
 echo.
 pause
 cls
-DEL /Q "%audir%\sroadb%filerawver%w.txt"
-DEL /Q "%audir%\sroadbcd.bat"
-DEL /Q "%audir%\sroadbcol.bat"
-DEL /Q "%audir%\sroadblogs.bat"
-DEL /Q "%audir%\sdconfig.bat"
-DEL /Q "%audir%\exsdconfig.bat"
-DEL /Q "%audir%\deviceip.bat"
-cls
-exit
+RD /S /Q "%audir%
+goto verydeeprestart
 
 :cderror
 title SuroADB %version% : Directory error.. 
@@ -542,20 +536,20 @@ goto cderror
 :: When the auto-restore file is deleted yet it still fails to configure, SuroADB will
 :: display cderror21
 :cderror2
-echo %TIME% Error while configuring working directory to %sroadbcd%. deleting sroadbcd.bat. >> "%audir%\sroadb-errorlog.txt"
+echo %TIME% %DATE% Error while configuring working directory to %sroadbcd%. deleting sroadbcd.bat. >> "%audir%\sroadb-errorlog.txt"
 DEL /Q %audir%\sroadbcd.bat
-IF NOT EXIST "%audir%\sroadbcd.bat" echo %TIME% sroadbcd.bat deleted. retrying configuration. >> "%audir%\sroadb-errorlog.txt"
+IF NOT EXIST "%audir%\sroadbcd.bat" echo %TIME% %DATE% sroadbcd.bat deleted. retrying configuration. >> "%audir%\sroadb-errorlog.txt"
 cls
 cd "%MYFILES%"
-IF NOT "%cd%"=="%MYFILES%" echo %TIME% unable to configure CD to "%sroadbcd%". >> "%audir%\sroadb-errorlog.txt"
+IF NOT "%cd%"=="%MYFILES%" echo %TIME% %DATE% unable to configure CD to "%sroadbcd%". >> "%audir%\sroadb-errorlog.txt"
 IF NOT "%cd%"=="%MYFILES%" goto cderror21
-IF "%cd%"=="%MYFILES%" echo %TIME% working directory set to %MYFILES%. >> "%audir%\sroadb-errorlog.txt"
+IF "%cd%"=="%MYFILES%" echo %TIME% %DATE% working directory set to %MYFILES%. >> "%audir%\sroadb-errorlog.txt"
 goto stt
 :cderror21
-echo %TIME% unable to set cd to %MYFILES% >> "%audir%\sroadb-errorlog.txt"
+echo %TIME% %DATE% unable to set cd to %MYFILES% >> "%audir%\sroadb-errorlog.txt"
 set cderrorm=exit
 REM CursorHide
-title SuroADB %version% : Directory error.. 
+title SuroADB %version% build %betabuildno% : Directory error.. 
 cls
 echo There was a problem with configuring the default working directory.
 echo.
@@ -569,6 +563,7 @@ IF %cderrorm%==exit exit
 IF %cderrorm%==mattsuro goto adminmode
 exit
 
+:: For debugging and testing
 :adminmode
 title SuroADB %version% : Henlo matt
 REM CursorShow
@@ -585,7 +580,7 @@ goto adminmode2
 
 
 :defcd
-IF NOT EXIST "%wdre%" echo %TIME% %wdre% does not exist! >> "%audir%\sroadb-errorlog.txt"
+IF NOT EXIST "%wdre%" echo %TIME% %DATE% %wdre% does not exist! >> "%audir%\sroadb-errorlog.txt"
 IF NOT EXIST "%wdre%" exit
 cls
 DEL /Q "%audir%\sroadbcd.bat"
@@ -625,8 +620,8 @@ cls
 goto wlcm2
 
 :v2f
-echo %TIME% Incomplete files >> "%audir%\sroadb-errorlog.txt"
-title SuroADB %version% : File error.. 
+echo %TIME% %DATE% Incomplete files >> "%audir%\sroadb-errorlog.txt"
+title SuroADB %version% build %betabuildno% : File error.. 
 cls
 echo One or more files have not been extracted succesfully.
 echo please start suroadb again.
@@ -1690,7 +1685,7 @@ goto op61
 
 :puserror
 (
-echo %TIME% file push error
+echo %TIME% %DATE% file push error
 echo ==data==
 echo File: %pusname%
 echo Destination: %pushf%
@@ -1714,7 +1709,7 @@ goto puserrorui
 
 :puserror0
 (
-echo %TIME% unknown file push error
+echo %TIME% %DATE% unknown file push error
 echo ==data==
 echo File: %pusname%
 echo Destination: %pushf%
@@ -1802,13 +1797,13 @@ set scrti=180
 IF EXIST "%audir%\adbrecordsize.bat" call "%audir%\adbrecordsize.bat"
 IF EXIST "%audir%\adbrecordtime.bat" call "%audir%\adbrecordtime.bat"
 cls
-echo Device Screen recording (size: %scrsi% time: %scrti% seconds)
+echo Device Screen Recording (size: %scrsi% time: %scrti% seconds)
 echo.
 echo Would you like to set up output resolution and time limit?
 echo.
 echo  Y - set up
 echo  N - use current settings
-echo  X - go back to menu
+echo  X - go back to main menu
 echo.
 echo.
 set /p scrm= : 
@@ -1821,7 +1816,7 @@ goto op52
 
 :scrmy
 cls
-echo Device Screen recording setup 1 (size: %scrsi% time: %scrti% seconds)
+echo Device Screen Recording 1/3 (size: %scrsi% time: %scrti% seconds)
 echo.
 echo Set the desired recording resolution. ex. 1280x720 (default)
 echo leave empty to continue with current resolution.
@@ -1829,46 +1824,45 @@ echo.
 echo.
 set /p scrsi= : 
 cls
-ping localhost -n 2 >nul
-cls
 (
 echo set scrsi=%scrsi%
 echo exit /b
 ) > "%audir%\adbrecordsize.bat"
-echo.
+goto scrmys2
+:scrmys2
 cls
-echo Device Screen recording setup 2 (size: %scrsi% time: %scrti% seconds)
+echo Device Screen Recording 2/3 (size: %scrsi% time: %scrti% seconds)
 echo.
 echo Set how many seconds to record. Maximum is 180 seconds (maximum and default)
-echo leave empty to continue with current time limit.
+echo leave empty to continue with %scrti% seconds.
 echo.
 echo.
 set /p scrti= : 
-cls
-ping localhost -n 2 >nul
 cls
 (
 echo set scrti=%scrti%
 echo exit /b
 ) > "%audir%\adbrecordtime.bat"
 echo.
+goto scrrdy
 :scrrdy
 cls
-echo Device Screen recording READY
+echo Device Screen recording
 echo.
 echo Resolution: %scrsi% Time: %scrti% seconds.
 echo Is this okay?
 echo.
-echo  Y  to continue  N  to start again
+echo  Y - continue
+echo  N - start setup again
+echo  X - go back to main menu
 echo.
 echo.
 set /p scrmyy= Y / N : 
 cls
 echo.
-IF %scrmyy%==Y goto op522
-IF %scrmyy%==N goto scrmy
-IF %scrmyy%==y goto op522
-IF %scrmyy%==n goto scrmy
+IF /i %scrmyy%==Y goto op522
+IF /i %scrmyy%==N goto scrmy
+IF /i %scrmyy%==X goto clsmenu
 goto scrrdy
 
 :op522
@@ -1877,7 +1871,7 @@ echo Begin screen recording? (size: %scrsi% time: %scrti% seconds.)
 echo.
 echo  Y - begin
 echo  S - configure settings
-echo  X - go back to menu
+echo  X - go back to main menu
 echo.
 echo.
 set /p scrbegin= : 
@@ -1897,10 +1891,11 @@ echo (avoid spaces and include .mp4!)
 echo.
 set /p scrbegin2= : 
 cls
+goto scrbegin11
 :scrbegin11
 IF EXIST "%audir%\sroadbsrpath.bat" goto scrp3
 echo  Enter the path to where the file should go.
-echo  ex. %sdcard%
+echo  ex. %sdconfig%/videos
 echo.
 set /p scrp= : 
 cls
@@ -1933,7 +1928,7 @@ IF %logst%==YES set /A entries=%entries% + 1
 IF %logst%==YES echo %TIME% %DATE% screen recording "%scrbegin2%" saved to "%scrsp%". >> "%audir%\sroadb-logs.txt"
 :scrp31
 cls
-echo  Success. Would you like to copy %scrbegin2% to your computer?
+echo Success. Would you like to copy %scrbegin2% to your computer?
 echo.
 echo.
 set /p scrend= Y / N : 
@@ -2347,7 +2342,7 @@ IF EXIST "%tempdir%\SuroADB\devchk.txt" set devstatus=ENABLE
 IF NOT EXIST "%tempdir%\SuroADB\rlogdel.txt" set rlogstatus=ENABLE
 IF EXIST "%tempdir%\SuroADB\rlogdel.txt" set rlogstatus=DISABLE
 IF NOT EXIST "%tempdir%\SuroADB\sroadbstt.bat" (
-echo set startupcmd=menu
+echo set startupcmd=menu (default)
 echo exit /b
 ) > "%tempdir%\SuroADB\sroadbstt.bat"
 IF EXIST "%tempdir%\SuroADB\sroadbstt.bat" call "%tempdir%\SuroADB\sroadbstt.bat"
@@ -2377,9 +2372,9 @@ IF EXIST "%tempdir%\SuroADB\sroadbstt.bat" call "%tempdir%\SuroADB\sroadbstt.bat
 cls
 echo Configure what command SuroADB will start by default
 echo.
-echo  Currently starting : %startupcmd%
+echo Currently starting : %startupcmd%
 echo.
-echo   menu (default) : devices : install : uninstall : packages
+echo   menu : devices : install : uninstall : packages
 echo   pull : push : screenshot : screenrecord
 echo.
 echo   poweroff : reboot
@@ -2431,13 +2426,14 @@ goto runtimesettings
 
 
 :uisettings
-set menuui=ERROR_UNABLE_TO_SET_VARIABLES
+set menuui=UNKNOWN_ERROR
 IF NOT EXIST "%audir%\sroadbuic.txt" set menuui=COMPACT
 IF EXIST "%audir%\sroadbuic.txt" set menuui=ORIGINAL
+set sroui=mu
 cls
 echo SuroADB UI
 echo.
-echo  mu - Switches menu UI to %menuui% mode
+echo  Press ENTER to switch UI to %menuui% mode.
 echo.
 echo menu
 echo.
@@ -2450,13 +2446,16 @@ goto uisettings
 :muiswitch
 IF %menuui%==COMPACT goto compsw
 IF %menuui%==ORIGINAL goto origsw
+cls
 goto uisettings
 :compsw
 echo compact > "%audir%\sroadbuic.txt"
-goto uisettings
+cls
+goto suroadbm
 :origsw
 DEL /Q "%audir%\sroadbuic.txt"
-goto uisettings
+cls
+goto suroadbm
 
 :srouninstall
 cls
@@ -2593,13 +2592,13 @@ echo  CD : 'adb is not recognized as an internal command'
 echo  RD : change working directory
 echo  XX  : revert to default working directory
 echo.
-echo  ex  : return to menu
+echo  X  : return to menu
 set /p troubles= : 
 cls
-IF /i %troubles%==cd goto repathq
-IF /i %troubles%==rd goto repath1
-IF /i %troubles%==ex goto suroadbm
-IF /i %troubles%==xx goto cdef
+IF /i %troubles%==CD goto repathq
+IF /i %troubles%==RD goto repath1
+IF /i %troubles%==XX goto cdef
+IF /i %troubles%==X goto suroadbm
 goto trouble
 
 :cdef
@@ -2942,7 +2941,7 @@ cls
 :updt1
 echo Update checking
 echo.
-echo This will check if an update exceeding Version %version% is available.
+echo This will check if an update exceeding Version %version% %betabuildno% is available.
 echo.
 echo This will also download the latest database.
 echo.
@@ -2960,7 +2959,7 @@ goto updt
 :updtswitch
 IF NOT EXIST "%wdre%\updtstop.txt" goto updt11
 IF EXIST "%wdre%\updtstop.txt" goto updt12
-echo %TIME% Unable to identify integrity of required files for updtswitch (cannot detect). >> "%audir%\sroadb-errorlog.txt"
+echo %TIME% %DATE% Unable to identify integrity of required files for updtswitch (cannot detect). >> "%audir%\sroadb-errorlog.txt"
 goto updt
 :updt11
 cls
@@ -3001,12 +3000,12 @@ echo.
 echo    You are using version %version% Build %betabuild%
 echo    You have used SuroADB %trost% times so far.
 echo.
-echo    suroadb.jimdofree.com
-echo    kutsuro.simdif.com
+echo    SuroADB website : suroadb.jimdofree.com
+echo    My projects : kutsuro.simdif.com
 echo.
-echo    2018 Matt "Kutsuro"
+echo    2018-2019 Matt "Kutsuro" Rentaro
 echo.
-echo    Email: hsudoru@gmail.com
+echo    Need help with SuroADB? contact me via hsudoru@gmail.com
 echo.
 pause
 cls
