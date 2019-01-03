@@ -2,6 +2,25 @@
 SuroADB Release Notes          kutsuro.simdif.com | suroadb.jimdofree.com
 ====================================================================================
 Latest:
+1/3/19 - 2019!
+              - added a workaround for file push filename error!
+               |- can detect if file has spaces
+               |- switches to workaround that copies the folder (Push) containing the file to directory of your choosing
+              - updated and improved sroadbupdate.exe old version detection
+              - updated sroadbupdateui.bat to display more lines
+              - minor adjustments for settings and screenrecord ui
+              - fixed and improved error logging
+              
+              This update was ready for release in the last week of December, but due to some busy schedules and christmas
+              celebrations, I wasn't able to! I'm sorry for the huge delay.
+              
+              I have added a new failsafe mechanism with the file push operations which can detect if a file has spaces, when
+              it does detect spaces or a filename error, it will switch to a workaround.
+              
+              Happy New Year!
+              
+              
+
 11/28/18 - 13 December!
               - added options for runtime (startup) in settings
                • configure what command SuroADB starts after startup
@@ -21,8 +40,6 @@ Latest:
               The next release may be released late next month, but BETA updates will come early.
               
               Advanced merry christmas, everybody! 
-
-
 
 11/4/18 - 12.1 End of sembreak
               - now hosted on GitHub!
