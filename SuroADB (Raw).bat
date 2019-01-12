@@ -1,44 +1,132 @@
 @echo off
-:verydeeprestart
-set version=13.1
+
+
+:versioninfo
+:: VERSION INFO 
+set version=14
 set newver=%version%
-set rawver=131
-set betabuild=131B
-set betabuildno=131B
-set filerawver=131
-set diode=f0
-set logst=YES
-set entries=0
-set startupcmd=menu
-:stcounter
-set trost=0
-:wifimodevariables
-set deviceip=NOT_SET
-set sessionid=%random%
-set sdconfig=/sdcard
-set exsdconfig=/storage/sdcard0
-:pathvariables
+set rawver=14
+set betabuild=14A
+set betabuildno=%betabuild%
+set filerawver=14
+
+
+:verydeeprestart
+IF NOT EXIST "%MYFILES%\SuroADB" MKDIR "%MYFILES%\SuroADB"
+goto makedir
+
+:makedir
+CD %MYFILES%
+IF NOT "%cd%"=="%MYFILES%" goto cderror2
 set wdre=%MYFILES%
 set audir=%MYFILES%\SuroADB
 set tempdir=%MYFILES%\sroadbtemp
-set instal=%tempdir%\Apk
-set pullf=NOT_SET
-set pushf=NOT_SET
-set scrsp=NOT_SET
-set scrp=NOT_SET
-REM CenterSelf
-title SuroADB %version% : Verifying directories.. 
-CD %MYFILES%
-IF NOT "%cd%"=="%MYFILES%" goto cderror2
 IF NOT EXIST "%audir%" MKDIR "%audir%"
 IF NOT EXIST "%tempdir%" MKDIR "%tempdir%"
 IF NOT EXIST "%tempdir%\SuroADB" MKDIR "%tempdir%\SuroADB"
 IF NOT EXIST "%tempdir%\db" MKDIR "%tempdir%\db"
 IF NOT EXIST "%tempdir%\Apk" MKDIR "%tempdir%\Apk"
-IF EXIST "%tempdir%\srodb\sroadbdb.bat" call "%tempdir%\srodb\sroadbdb.bat"
-cls
+IF NOT EXIST "%tempdir%\Push" MKDIR "%tempdir%\Push"
+IF NOT EXIST "%tempdir%\Update" MKDIR "%tempdir%\Update"
+echo %TIME% %DATE% SuroADB %version% build %betabuildno% started >> "%tempdir%\SuroADB\sroadb-runtime.txt"
+echo %TIME% %DATE% Directories configured >> "%tempdir%\SuroADB\sroadb-runtime.txt"
+goto setconfigdefault
+
+
+:setconfigdefault
+:: SETTINGS CONFIGS
+:: (RUNTIME)
+
+:: counters
+set entries=0
+set trost=0
+set sessionid=%random%
+
+:: color
+set diode=3f
+:: logging
+set logst=ON
+:: custom startup
+set startupcmd=menu
+
+:: configs
+set sdconfig=/sdcard
+set exsdconfig=NOT_SET
+
+:: wifi mode
+set deviceip=NOT_SET
+
+:: (PATH VARIABLES)
+
+:: working directory
+set wdre=%MYFILES%
+set audir=%MYFILES%\SuroADB
+set tempdir=%MYFILES%\sroadbtemp
+
+:: for apk install
+set instal=%tempdir%\Apk
+
+:: for package list
+set exportpackage=no
+
+:: for file push and pullf
+set pullf=NOT_SET
+set pushf=NOT_SET
+:: for screenrecord and screenshot
+set scrsp=NOT_SET
+set scrp=NOT_SET
+set scrsi=1280x720
+set scrti=180
+
+
+echo %TIME% %DATE% Default settings set >> "%tempdir%\SuroADB\sroadb-runtime.txt"
+IF EXIST "%audir%\srodb-settings.bat" goto setconfig
+IF NOT EXIST "%audir%\srodb-settings.bat" goto setconfig0
+
+
+:: This applies all settings into sroadb-settings.bat
+:setconfig
+IF EXIST "%audir%\srodb-settings.bat" CALL "%audir%\srodb-settings.bat"
+IF EXIST "%audir%\srodb-settings.bat" echo %TIME% %DATE% srodb-settings.bat called >> "%tempdir%\SuroADB\sroadb-runtime.txt"
+IF NOT EXIST "%audir%\srodb-settings.bat" echo %TIME% %DATE% Default settings exported >> "%tempdir%\SuroADB\sroadb-runtime.txt"
+set return=opstartup
+goto setconfig0
+:setconfig0
+(
+echo :: Last updated on %TIME% %DATE%
+echo set entries=%entries%
+echo set trost=%trost%
+echo set sessionid=%random%
+echo set diode=%diode%
+echo set logst=%logst%
+echo set startupcmd=%startupcmd%
+echo set sdconfig=%sdconfig%
+echo set exsdconfig=%exsdconfig%
+echo set deviceip=%deviceip%
+echo set exportpackage=%exportpackage%
+echo set wdre=%wdre%
+echo set audir=%audir%
+echo set tempdir=%tempdir%
+echo set instal=%instal%
+echo set pullf=%pullf%
+echo set pushf=%pushf%
+echo set scrsp=%scrsp%
+echo set scrp=%scrp%
+set scrsi=1280x720
+set scrti=180
+
+echo exit /b
+) > %audir%\srodb-settings.bat
+echo %TIME% %DATE% Settings applied and exported >> "%tempdir%\SuroADB\sroadb-runtime.txt"
+IF EXIST "%audir%\srodb-settings.bat" CALL "%audir%\srodb-settings.bat"
+goto %return%
+goto opstartup
+
+:opstartup
+:: (Directory setup moved to lines 30~)
 
 :: This will create the version info file for update checking
+echo %TIME% %DATE% Creating verinfo for %version% %betabuildno% >> "%tempdir%\SuroADB\sroadb-runtime.txt"
 (
 echo set version=%version%
 echo set newver=%version%
@@ -48,6 +136,7 @@ echo set betabuildno=%betabuildno%
 echo set filerawver=%filerawver%
 echo exit /b
 ) > "%MYFILES%\sroadbverinfo.bat"
+
 
 :: This will start SuroADB!Beta.exe, if available
 IF EXIST "%tempdir%\SuroADB\betabuild.bat" call "%tempdir%\SuroADB\betabuild.bat"
@@ -68,26 +157,18 @@ goto restore
 
 :: This will count how many times SuroADB has started
 :srocounter
-IF NOT EXIST "%tempdir%\SuroADB\sroadb-counter.bat" goto countercr
-IF EXIST "%tempdir%\SuroADB\sroadb-counter.bat" CALL "%tempdir%\SuroADB\sroadb-counter.bat"
+IF EXIST "%audir%\srodb-settings.bat" CALL "%audir%\srodb-settings.bat"
 set /A trost=%trost% + 1
-(
-echo set trost=%trost%
-echo exit /b
-) > "%tempdir%\SuroADB\sroadb-counter.bat"
+echo %TIME% %DATE% %trost% sessions >> "%tempdir%\SuroADB\sroadb-runtime.txt"
+set return=srocounter2
+goto setconfig0
+:srocounter2
 IF %trost%==5 goto srocounter2
-goto runtimelog
-:countercr
-(
-echo set trost=1
-echo exit /b
-) > "%tempdir%\SuroADB\sroadb-counter.bat"
 goto runtimelog
 
 
 :srocounter2
-IF EXIST "%audir%\sroadbcol.bat" call "%audir%\sroadbcol.bat"
-IF EXIST "%audir%\sroadbcol.bat" color %diode%
+color %diode%
 IF %ERRORLEVEL%==1 set rest=cols
 IF %ERRORLEVEL%==1 goto restore
 title SuroADB %version% : Hello
@@ -115,15 +196,13 @@ goto srocounter2
 :: This will log events on runtime
 :runtimelog
 title SuroADB %version% : Logging runtime events..
-IF NOT EXIST "%tempdir%\SuroADB\sroadb-runtime.txt" echo SuroADB %version% Runtime Logs > "%tempdir%\SuroADB\sroadb-runtime.txt"
-echo %TIME% %DATE% suroadb %version% started >> "%tempdir%\SuroADB\sroadb-runtime.txt"
+IF NOT EXIST "%tempdir%\SuroADB\sroadb-runtime.txt" echo SuroADB Runtime Logs > "%tempdir%\SuroADB\sroadb-runtime.txt"
 
 :: This will set your selected color scheme.
 :colorset
 title SuroADB %version% : Setting color scheme.. 
-IF EXIST "%audir%\sroadbcol.bat" call "%audir%\sroadbcol.bat"
-IF EXIST "%audir%\sroadbcol.bat" color %diode%
-echo %TIME% %DATE% color scheme changed to %diode% >> "%tempdir%\SuroADB\sroadb-runtime.txt"
+color %diode%
+echo %TIME% %DATE% Color scheme changed to %diode% >> "%tempdir%\SuroADB\sroadb-runtime.txt"
 IF %ERRORLEVEL%==1 set rest=cols
 IF %ERRORLEVEL%==1 goto restore
 goto cfgcall
@@ -132,14 +211,10 @@ goto cfgcall
 :: This calls the config (path file)
 :cfgcall
 title SuroADB %version% : Calling config files.. 
-IF EXIST "%audir%\sroadbsdconfig.bat" call "%audir%\sroadbsdconfig.bat"
-IF EXIST "%audir%\sroadbexsdconfig.bat" call "%audir%\sroadbsdconfig.bat"
-IF EXIST "%audir%\sroadbsdconfig.bat" echo %TIME% %DATE% sdconfig called >> "%tempdir%\SuroADB\sroadb-runtime.txt"
-IF EXIST "%audir%\sroadbexsdconfig.bat" echo %TIME% %DATE% exsdconfig called >> "%tempdir%\SuroADB\sroadb-runtime.txt"
+echo %TIME% %DATE% Path configs called: values=%sdconfig%, %exsdconfig% >> "%tempdir%\SuroADB\sroadb-runtime.txt"
 
 :: This will check for updates at start.
 :updtchk
-IF NOT EXIST "%audir%" MKDIR "%audir%"
 IF EXIST "%MYFILES%\updtstop.txt" echo %TIME% %DATE% updtstop.txt present, skipping update check >> "%tempdir%\SuroADB\sroadb-runtime.txt"
 IF EXIST "%MYFILES%\updtstop.txt" goto wifidebugmode
 
@@ -157,14 +232,11 @@ goto wifidebugmode
 :: This starts the ADB wifi debugging mode (WiFi mode)
 :wifidebugmode
 cls
-IF EXIST "%audir%\deviceip.bat" call "%audir%\deviceip.bat"
-IF EXIST "%audir%\deviceip.bat" echo %TIME% %DATE% deviceip.bat present >> "%tempdir%\SuroADB\sroadb-runtime.txt"
-IF %deviceip%==NOT_SET goto deldevip
+echo %TIME% %DATE% deviceip called >> "%tempdir%\SuroADB\sroadb-runtime.txt"
+IF %deviceip%==NOT_SET goto credb
 goto wifidebugmode0
 :deldevip
-IF EXIST "%audir%\deviceip.bat" DEL /Q "%audir%\deviceip.bat"
 :wifidebugmode0
-IF EXIST "%audir%\deviceip.bat" goto wifidebugmode2
 goto credb
 :wifidebugmode2
 title SuroADB %version% : Configuring wifi debug mode.. 
@@ -196,9 +268,8 @@ adb connect %deviceip%:5555
  goto wifidebugmode3
  
  :wifidebugdel
- IF EXIST "%audir%\deviceip.bat" DEL /Q "%audir%\deviceip.bat"
  cls
- echo Wifi debug mode will not apply at start anymore.
+ echo Wifi debug mode will not apply at start anymore to avoid errors.
  echo.
  echo Please perform the setup again in the menu.
  echo.
@@ -226,9 +297,9 @@ goto stt
 :stt
 IF EXIST "%tempdir%\SuroADB\devchk.txt" echo %TIME% %DATE% devchk.txt present, skipping adb devices check >> "%tempdir%\SuroADB\sroadb-runtime.txt"
 IF EXIST "%tempdir%\SuroADB\devchk.txt" goto sdconfig
-title SuroADB %version% : Starting daemon.. 
+title SuroADB %version% : Starting ADB.. 
 cls
-echo %TIME% %DATE% runtime adb devices check started >> "%tempdir%\SuroADB\sroadb-runtime.txt"
+echo %TIME% %DATE% adb.exe has awoketh >> "%tempdir%\SuroADB\sroadb-runtime.txt"
 adb devices
 cls
 :: This checks the presence of SDCONFIG
@@ -236,8 +307,7 @@ cls
 IF EXIST "%MYFILES%\sroadb%filerawver%w.txt" goto sdconfigver
 goto stt1
 :sdconfigver
-IF NOT EXIST "%audir%\sroadbsdconfig.bat" goto cfgcrr
-IF NOT EXIST "%audir%\sroadbexsdconfig.bat" goto cfgcrr
+IF %exsdconfig%==NOT_SET goto cfgcrr
 goto stt1
 :cfgcrr
 title SuroADB %version% : Configuring database.. 
@@ -252,8 +322,6 @@ echo.
 set /p sdconfig= : 
 cls
 IF EXIST "%tempdir%\db\sroadbdb.bat" call "%tempdir%\db\sroadbdb.bat"
-ping localhost -n 2 >nul
-echo set sdconfig=%sdconfig% > "%audir%\sroadbsdconfig.bat"
 goto cfgcrr2
 :cfgcrr2
 cls
@@ -266,8 +334,6 @@ echo.
 set /p exsdconfig= : 
 cls
 IF EXIST "%tempdir%\db\sroadbdb.bat" call "%tempdir%\db\sroadbdb.bat"
-ping localhost -n 2 >nul
-echo set exsdconfig=%exsdconfig% > "%audir%\sroadbexsdconfig.bat"
 goto cfgcrr3
 
 :cfgcrr3
@@ -285,8 +351,15 @@ set /p cfgcre= IN / EX / OK :
 cls
 IF /i %cfgcre%==IN goto incfgc
 IF /i %cfgcre%==EX goto excfgc
-IF /i %cfgcre%==OK goto clsmenu
+IF /i %cfgcre%==OK goto sdconfigchk
 goto cfgcrr3
+
+:sdconfigchk
+set sdconfig=%sdconfig%
+set exsdconfig=%exsdconfig%
+set return=clsmenu
+goto setconfig0
+
 
 :incfgc
 cls
@@ -298,8 +371,6 @@ echo.
 set /p sdconfig= : 
 cls
 IF EXIST "%tempdir%\db\sroadbdb.bat" call "%tempdir%\db\sroadbdb.bat"
-ping localhost -n 2 >nul
-echo set sdconfig=%sdconfig% > "%audir%\sroadbsdconfig.bat"
 goto cfgcrr3
 
 :excfgc
@@ -312,8 +383,6 @@ echo.
 set /p exsdconfig= : 
 cls
 IF EXIST "%tempdir%\db\sroadbdb.bat" call "%tempdir%\db\sroadbdb.bat"
-ping localhost -n 2 >nul
-echo set exsdconfig=%exsdconfig% > "%audir%\sroadbexsdconfig.bat"
 goto cfgcrr3
 
 
@@ -327,6 +396,7 @@ IF NOT EXIST "%tempdir%\Push" MKDIR "%tempdir%\Push"
 IF NOT EXIST "%tempdir%\Update" MKDIR "%tempdir%\Update"
 IF NOT EXIST "%tempdir%\db" MKDIR "%tempdir%\db"
 IF NOT EXIST "%audir%" MKDIR "%audir%"
+echo %TIME% %DATE% Directories configured once again >> "%tempdir%\SuroADB\sroadb-runtime.txt"
 title SuroADB %version% : Configuring log files.. 
 IF EXIST "%audir%\sroadb-logs.txt" goto elog
 goto logmk
@@ -334,7 +404,7 @@ goto logmk
 IF EXIST "%audir%\sroadb-errorlog.txt" goto stt2
 goto logmk
 :logmk
-echo %TIME% %DATE% log files created >> "%tempdir%\SuroADB\sroadb-runtime.txt"
+echo %TIME% %DATE% Log files created >> "%tempdir%\SuroADB\sroadb-runtime.txt"
 IF NOT EXIST "%audir%\sroadb-errorlog.txt" echo SuroADB %version% Error Logging > "%audir%\sroadb-errorlog.txt"
 IF NOT EXIST "%audir%\sroadb-logs.txt" goto srodblmk
 goto sttt
@@ -358,7 +428,6 @@ echo =============================================
 echo.
 echo SuroADB : %version% %betabuild% started %TIME% %DATE%
 IF NOT EXIST "%tempdir%\SuroADB\devchk.txt" adb devices
-IF EXIST "%audir%\deviceip.bat" echo %TIME% %DATE% ADB connected to %wirelesip%:5555
 echo.
 ) >> "%audir%\sroadb-logs.txt"
 
@@ -394,6 +463,10 @@ IF EXIST "%MYFILES%\sroadb12w.txt" set localver=12
 IF EXIST "%MYFILES%\sroadb12w.txt" goto oldvergen
 IF EXIST "%MYFILES%\sroadb121w.txt" set localver=12.1
 IF EXIST "%MYFILES%\sroadb121w.txt" goto oldvergen
+IF EXIST "%MYFILES%\sroadb13w.txt" set localver=13
+IF EXIST "%MYFILES%\sroadb13w.txt" goto oldvergen
+IF EXIST "%MYFILES%\sroadb131w.txt" set localver=13.1
+IF EXIST "%MYFILES%\sroadb131w.txt" goto oldvergen
 goto conft
 
 
@@ -432,37 +505,36 @@ DEL /Q "%MYFILES%\sroadb11w.txt"
 DEL /Q "%MYFILES%\sroadb111w.txt"
 DEL /Q "%MYFILES%\sroadb12w.txt"
 DEL /Q "%MYFILES%\sroadb121w.txt"
+DEL /Q "%MYFILES%\sroadb13w.txt"
+DEL /Q "%MYFILES%\sroadb131w.txt"
+echo %TIME% %DATE% Version %localver% detected >> "%tempdir%\SuroADB\sroadb-runtime.txt"
 title SuroADB %version%
 cls
 echo You've been using SuroADB %localver%. Great!
 echo.
-echo I would really appreciate any kind of message regarding
-echo SuroADB, for example, an angry one regarding the slow
-echo updates! :D
+echo Starting in SuroADB 14, the way SuroADB reads and saves
+echo preferences and settings such as paths and switches has
+echo been completely reworked, so the classic individual files having
+echo their own usage in the code now relies on a single file instead!
 echo.
-echo You can input a fake email.. I don't mind! You can leave
-echo an anonymous message on my website's contact page.
+echo Because of this, you need a clean sweep of SuroADB's data folders
+echo to help delete useless files.
 echo.
-echo I won't bother you anymore after this. I promise!
+echo Would you like to do that now?
 echo.
-set /p sroc2= Please!? Y / N : 
+set /p sroc2= Y / N : 
 cls
-IF /i %sroc2%==Y start https://suroadb.jimdofree.com/contact/
+IF /i %sroc2%==Y start %audir%
 IF /i %sroc2%==Y goto conft
 IF /i %sroc2%==N goto conft
 goto oldvergen
 
-:conft
-title SuroADB %version% : Configuring logs.. 
-cls
-:: This will enable (or disable) logging. Depends on your settings.
-IF EXIST "%audir%\sroadblogs.bat" echo %TIME% %DATE% sroadblogs.bat present >> "%tempdir%\SuroADB\sroadb-runtime.txt"
-IF EXIST "%audir%\sroadblogs.bat" call "%audir%\sroadblogs.bat"
 
+:conft
 :: This automates the cd to the one you set.
 :: MYFILES is the temp folder for suroadb.
 :precd
-title SuroADB %version% : Configuring directories.. 
+title SuroADB %version% : Configuring working directories.. 
 cd "%MYFILES%"
 IF NOT EXIST "%audir%\sroadbcd.bat" cd "%wdre%"
 IF NOT "%cd%"=="%MYFILES%" goto cderror2
@@ -484,10 +556,10 @@ goto restore
 :: Errors usually happen when certain automatic-restore scripts (ex. sroadbcd sets a custom wd)
 :: have wrong commands in them.
 :restore
-IF %rest%==cols DEL /Q "%audir%\sroadbcol.bat"
 IF %rest%==cols echo %TIME% %DATE% color value "%diode%" has set ERRORLEVEL to 1. >> "%audir%\sroadb-errorlog.txt"
-IF %rest%==cols set diode=f0
-IF %rest%==cols goto interfacemenu
+IF %rest%==cols set diode=3f
+IF %rest%==cols set return=interfacemenu
+IF %rest%==cols goto setconfig0
 IF %rest%==betabuildstarter echo %TIME% %DATE% betabuild.bat was changed, but SuroADB!Beta.exe is missing. Please don't modify betabuild.bat! >> "%audir%\sroadb-errorlog.txt"
 IF %rest%==betabuildstarter (
 echo set betabuild=%betabuildno%
@@ -600,8 +672,10 @@ IF NOT %betabuild%==%betabuildno% goto betabuildstarter
 echo set betabuild=%betabuildno%
 echo exit /b
 ) > "%tempdir%\SuroADB\betabuild.bat"
+echo %TIME% %DATE% betabuild.bat created >> "%tempdir%\SuroADB\sroadb-runtime.txt"
 IF EXIST "%MYFILES%\sroadb%filerawver%w.txt" goto premenu
 echo SuroADB %version% build %betabuildno% installed as %MYFILES% on %TIME% %DATE%  > "sroadb%filerawver%w.txt"
+echo %TIME% %DATE% SuroADB has been installed via %MYFILES% >> "%tempdir%\SuroADB\sroadb-runtime.txt"
 goto verify
 
 
@@ -620,11 +694,11 @@ cls
 goto wlcm2
 
 :v2f
-echo %TIME% %DATE% Incomplete files >> "%audir%\sroadb-errorlog.txt"
+echo %TIME% %DATE% Incomplete files, or extraction error >> "%audir%\sroadb-errorlog.txt"
 title SuroADB %version% build %betabuildno% : File error.. 
 cls
 echo One or more files have not been extracted succesfully.
-echo please start suroadb again.
+echo Please try to start SuroADB.exe again.
 echo.
 pause
 exit
@@ -648,8 +722,7 @@ IF /i %wlcm%==N goto wlcverify
 goto wlcm211
 
 :wlcverify
-IF NOT EXIST "%audir%\sroadbexsdconfig.bat" goto wlcverify2
-IF NOT EXIST "%audir%\sroadbsdconfig.bat" goto wlcverify2
+IF NOT %exsdconfig%==NOT_SET goto wlcm21
 goto clsmenu
 :wlcverify2
 color %diode%
@@ -664,8 +737,6 @@ echo.
 set /p sdconfig= : 
 cls
 IF EXIST "%tempdir%\db\sroadbdb.bat" call "%tempdir%\db\sroadbdb.bat"
-ping localhost -n 2 >nul
-echo set sdconfig=%sdconfig% > "%audir%\sroadbsdconfig.bat"
 goto wlcver3
 :wlcver3
 cls
@@ -678,8 +749,6 @@ echo.
 set /p exsdconfig= : 
 cls
 IF EXIST "%tempdir%\db\sroadbdb.bat" call "%tempdir%\db\sroadbdb.bat"
-ping localhost -n 2 >nul
-echo set exsdconfig=%exsdconfig% > "%audir%\sroadbexsdconfig.bat"
 goto wlcver4
 
 :wlcver4
@@ -697,8 +766,15 @@ set /p cfgcre= IN / EX / OK :
 cls
 IF /i %cfgcre%==IN goto wlcin
 IF /i %cfgcre%==EX goto wlcex
-IF /i %cfgcre%==OK goto clsmenu
+IF /i %cfgcre%==OK goto sdconfigver2
 goto wlcver4
+
+:sdconfigver2
+set sdconfig=%sdconfig%
+set exsdconfig=%exsdconfig%
+set return=clsmenu
+goto setconfig0
+
 
 :wlcin
 cls
@@ -710,8 +786,6 @@ echo.
 set /p sdconfig= : 
 cls
 IF EXIST "%tempdir%\db\sroadbdb.bat" call "%tempdir%\db\sroadbdb.bat"
-ping localhost -n 2 >nul
-echo set sdconfig=%sdconfig% > "%audir%\sroadbsdconfig.bat"
 goto wlcver4
 
 :wlcex
@@ -724,8 +798,6 @@ echo.
 set /p exsdconfig= : 
 cls
 IF EXIST "%tempdir%\db\sroadbdb.bat" call "%tempdir%\db\sroadbdb.bat"
-ping localhost -n 2 >nul
-echo set exsdconfig=%exsdconfig% > "%audir%\sroadbexsdconfig.bat"
 goto wlcver4
 
 
@@ -743,8 +815,6 @@ echo.
 set /p sdconfig= : 
 cls
 IF EXIST "%tempdir%\db\sroadbdb.bat" call "%tempdir%\db\sroadbdb.bat"
-ping localhost -n 2 >nul
-echo set sdconfig=%sdconfig% > "%audir%\sroadbsdconfig.bat"
 goto wlcnotice1
 :wlcnotice1
 cls
@@ -757,8 +827,6 @@ echo.
 set /p exsdconfig= : 
 cls
 IF EXIST "%tempdir%\db\sroadbdb.bat" call "%tempdir%\db\sroadbdb.bat"
-ping localhost -n 2 >nul
-echo set exsdconfig=%exsdconfig% > "%audir%\sroadbexsdconfig.bat"
 goto wlcnotice2
 
 :wlcnotice2
@@ -776,8 +844,15 @@ set /p cfgcre= IN / EX / OK :
 cls
 IF /i %cfgcre%==IN goto wlcnoticein
 IF /i %cfgcre%==EX goto wlcnoticeex
-IF /i %cfgcre%==OK goto adminnotice
+IF /i %cfgcre%==OK goto sdconfigver3
 goto wlcnotice2
+
+:sdconfigver3
+set sdconfig=%sdconfig%
+set exsdconfig=%exsdconfig%
+set return=adminnotice
+goto setconfig0
+
 
 :wlcnoticein
 cls
@@ -789,8 +864,6 @@ echo.
 set /p sdconfig= : 
 cls
 IF EXIST "%tempdir%\db\sroadbdb.bat" call "%tempdir%\db\sroadbdb.bat"
-ping localhost -n 2 >nul
-echo set sdconfig=%sdconfig% > "%audir%\sroadbsdconfig.bat"
 goto wlcnotice2
 
 :wlcnoticeex
@@ -803,8 +876,6 @@ echo.
 set /p exsdconfig= : 
 cls
 IF EXIST "%tempdir%\db\sroadbdb.bat" call "%tempdir%\db\sroadbdb.bat"
-ping localhost -n 2 >nul
-echo set exsdconfig=%exsdconfig% > "%audir%\sroadbexsdconfig.bat"
 goto wlcnotice2
 
 
@@ -894,9 +965,8 @@ echo.
 goto menu
 
 :: This is the startup mechanism for the cmd startup configuration
-:: Triggered by startup on line 644~
+:: Variables are set from srodb-settings.bat
 :premenu
-IF EXIST "%tempdir%\SuroADB\sroadbstt.bat" CALL "%tempdir%\SuroADB\sroadbstt.bat"
 IF /i %startupcmd%==menu goto clsmenu
 IF /i %startupcmd%==devices goto op1
 IF /i %startupcmd%==install goto op2
@@ -1258,8 +1328,8 @@ echo Selected : %pkgname%
 echo Installing ...
 adb install "%instal%\%apkid%.apk"
 DEL /Q "%instal%\%apkid%.apk"
-IF %logst%==YES set /A entries=%entries% + 1
-IF %logst%==YES echo %TIME% %DATE% "%result%" selected for install to device. >> %audir%\sroadb-logs.txt
+IF %logst%==ON set /A entries=%entries% + 1
+IF %logst%==ON echo %TIME% %DATE% "%result%" selected for install to device. >> %audir%\sroadb-logs.txt
 echo.
 goto op2cl
 
@@ -1296,8 +1366,8 @@ echo Selected : %pkgname%
 echo Installing ...
 adb install -s "%instal%\%apkid%.apk"
 DEL /Q "%instal%\%apkid%.apk"
-IF %logst%==YES set /A entries=%entries% + 1
-IF %logst%==YES echo %TIME% %DATE% "%result%" selected for install to device. >> %audir%\sroadb-logs.txt
+IF %logst%==ON set /A entries=%entries% + 1
+IF %logst%==ON echo %TIME% %DATE% "%result%" selected for install to device. >> %audir%\sroadb-logs.txt
 echo.
 goto op2cl
 
@@ -1334,8 +1404,8 @@ echo Selected : %pkgname%
 echo Installing ...
 adb install -s "%instal%\%apkid%.apk"
 DEL /Q "%instal%\%apkid%.apk"
-IF %logst%==YES set /A entries=%entries% + 1
-IF %logst%==YES echo %TIME% %DATE% "%result%" selected for install to device. >> %audir%\sroadb-logs.txt
+IF %logst%==ON set /A entries=%entries% + 1
+IF %logst%==ON echo %TIME% %DATE% "%result%" selected for install to device. >> %audir%\sroadb-logs.txt
 echo.
 goto op2cl
 
@@ -1373,8 +1443,8 @@ echo Selected : %pkgname%
 echo Installing ...
 adb -g install %instal%\%apkid%.apk"
 DEL /Q "%instal%\%apkid%.apk"
-IF %logst%==YES set /A entries=%entries% + 1
-IF %logst%==YES echo %TIME% %DATE% "%result%" selected for install to device. >> "%audir%\sroadb-logs.txt"
+IF %logst%==ON set /A entries=%entries% + 1
+IF %logst%==ON echo %TIME% %DATE% "%result%" selected for install to device. >> "%audir%\sroadb-logs.txt"
 echo.
 goto op2cl
 
@@ -1446,8 +1516,8 @@ cls
 if %unpackage%==menu goto clsmenu
 if %unpackage%==MENU goto clsmenu
 adb uninstall %unpackage%
-IF %logst%==YES set /A entries=%entries% + 1
-IF %logst%==YES echo %TIME% %DATE% "%unpackage%" selected for uninstallation. >> "%audir%\sroadb-logs.txt"
+IF %logst%==ON set /A entries=%entries% + 1
+IF %logst%==ON echo %TIME% %DATE% "%unpackage%" selected for uninstallation. >> "%audir%\sroadb-logs.txt"
 echo.
 goto op33
 
@@ -1478,19 +1548,15 @@ echo Would you like to always export the package list from now on?
 echo.
 set /p opno=Y / N : 
 cls
-IF %opno%==y goto epkg
-IF %opno%==n goto clsmenu
-IF %opno%==Y goto epkg
-IF %opno%==N goto clsmenu
+IF /i %opno%==Y goto epkg
+IF /i %opno%==N goto clsmenu
 goto clsmenu
 :epkg
 ping localhost -n 2 >nul
 cls
-(
-echo set exportpackage=yes
-echo exit /b
-) > "%audir%\sroadbexportpk.bat"
-goto clsmenu
+set exportpackage=yes
+set return=clsmenu
+goto setconfig0
 
 :pkgexport
 cls
@@ -1520,9 +1586,9 @@ echo Enter menu to go back to menu.
 echo.
 set /p pullf= : 
 cls
+IF /i %pullf%==MENU goto clsmenu
 IF EXIST "%tempdir%\db\sroadbdb.bat" call "%tempdir%\db\sroadbdb.bat"
 ping localhost -n 2 >nul
-IF /i %pullf%==MENU goto clsmenu
 cls
 echo Select the folder where "%pullf%" will be copied to.
 rem BrowseFolder
@@ -1533,8 +1599,8 @@ echo Copying : %pullf%
 echo To : %result%
 echo.
 adb pull "%pullf%" "%result%"
-IF %logst%==YES set /A entries=%entries% + 1
-IF %logst%==YES echo %TIME% %DATE% "%pullf%" copied to "%result%". >> %audir%\sroadb-logs.txt
+IF %logst%==ON set /A entries=%entries% + 1
+IF %logst%==ON echo %TIME% %DATE% "%pullf%" copied to "%result%". >> %audir%\sroadb-logs.txt
 echo.
 goto op5c
 
@@ -1585,8 +1651,8 @@ echo Copying : %result%
 echo To : %pushf%
 echo.
 adb push "%result%" "%pushf%"
-IF %logst%==YES set /A entries=%entries% + 1
-IF %logst%==YES echo %TIME% %DATE% "%result%" copied to "%pushf%". >> "%audir%\sroadb-logs.txt"
+IF %logst%==ON set /A entries=%entries% + 1
+IF %logst%==ON echo %TIME% %DATE% "%result%" copied to "%pushf%". >> "%audir%\sroadb-logs.txt"
 echo.
 goto op61
 
@@ -1654,7 +1720,7 @@ adb push "%tempdir%\Push\%pusname%" "%pushf%"
 ping localhost -n 2 >nul
 IF EXIST "%tempdir%\Push" RD /S /Q "%tempdir%\Push"
 IF NOT EXIST "%tempdir%\Push" MKDIR "%tempdir%\Push"
-IF %logst%==YES echo %TIME% %DATE% "%pusname%" copied to "%pushf%". >> "%audir%\sroadb-logs.txt"
+IF %logst%==ON echo %TIME% %DATE% "%pusname%" copied to "%pushf%". >> "%audir%\sroadb-logs.txt"
 echo.
 goto op61
 
@@ -1662,15 +1728,18 @@ goto op61
 :pushnative404
 cls
 echo A folder named "Push" will be copied to the path
-echo you entered.
+echo you enter.
 echo.
 echo This folder will contain "%pusname%".
 echo.
 echo Enter the path to where the folder should go.
 echo ex. %sdconfig%
 echo.
+echo to cancel operation, enter MENU
 echo.
 set /p pushf= : 
+IF /i %pushf%=MENU RD /S /Q "%tempdir%\Push"
+IF /i %pushf%=MENU goto clsmenu
 cls
 IF EXIST "%tempdir%\db\sroadbdb.bat" call "%tempdir%\db\sroadbdb.bat"
 ping localhost -n 2 >nul
@@ -1678,7 +1747,7 @@ cls
 echo Copying : %tempdir%\Push (contains %pusname%)
 echo To : %pushf%
 adb push "%tempdir%\Push" "%pushf%"
-IF %logst%==YES echo %TIME% %DATE% "%pusname%" copied to "%pushf%/Push" via Workaround. >> "%audir%\sroadb-logs.txt"
+IF %logst%==ON echo %TIME% %DATE% "%pusname%" copied to "%pushf%/Push" via Workaround. >> "%audir%\sroadb-logs.txt"
 IF EXIST "%tempdir%\Push" RD /S /Q "%tempdir%\Push"
 IF NOT EXIST "%tempdir%\Push" MKDIR "%tempdir%\Push"
 goto op61
@@ -1702,7 +1771,7 @@ echo.
 echo.
 set /p puserror1= Y / N : 
 cls
-IF /i %puserror1%==Y goto pushnative404
+IF /i %puserror1%==Y goto pushf3prep
 IF /i %puserror1%==N RD /S /Q "%wdre%\sroadbtemp\Push"
 IF /i %puserror1%==N goto op6
 goto puserrorui
@@ -1745,8 +1814,10 @@ echo.
 set /p screen= : 
 cls
 IF /i %screen%==menu goto clsmenu
-IF EXIST "%audir%\sroadbsspath.bat" call "%audir%\sroadbsspath.bat"
-IF EXIST "%audir%\sroadbsspath.bat" goto scrsp1
+goto op51path
+
+:op51path
+IF NOT %scrsp%==NOT_SET goto scrsp1
 echo Where should the screenshot file go?
 echo. enter the path. ex. %sdconfig%/screenshots
 echo.
@@ -1757,29 +1828,23 @@ ping localhost -n 2 >nul
 :scrsp1
 adb shell screencap "%scrsp%"/%screen%
 echo Screenshot %screen% saved to %scrsp%.
-IF %logst%==YES set /A entries=%entries% + 1
-IF %logst%==YES echo %TIME% %DATE% screenshot "%screen%" saved to "%scrsp%". >> "%audir%\sroadb-logs.txt"
+IF %logst%==ON set /A entries=%entries% + 1
+IF %logst%==ON echo %TIME% %DATE% screenshot "%screen%" saved to "%scrsp%". >> "%audir%\sroadb-logs.txt"
 :scrp2
-IF EXIST "%audir%\sroadbsspath.bat" goto scrsps
+IF NOT %scrsp%==NOT_SET goto goto scrsps
 cls
 echo Would you like to set %scrsp% as a default save path from now on?
 echo.
 set /p scrsv=Y / N : 
 cls
-IF %scrsv%==y goto scrspp
-IF %scrsv%==Y goto scrspp
-IF %scrsv%==n goto scrsps
-IF %scrsv%==N goto scrsps
+IF /i %scrsv%==Y goto scrspp
+IF /i %scrsv%==N goto scrsps
 goto scrp2
 
 :scrspp
-ping localhost -n 2 >nul
-cls
-(
-echo set scrsp=%scrsp%
-echo exit /b
-) > "%audir%\sroadbsspath.bat"
-goto scrsps
+set scrsp=%scrsp%
+set return=scrsps
+goto setconfig0
 
 :scrsps
 cls
@@ -1794,8 +1859,6 @@ goto scrsps
 :op52
 set scrsi=1280x720
 set scrti=180
-IF EXIST "%audir%\adbrecordsize.bat" call "%audir%\adbrecordsize.bat"
-IF EXIST "%audir%\adbrecordtime.bat" call "%audir%\adbrecordtime.bat"
 cls
 echo Device Screen Recording (size: %scrsi% time: %scrti% seconds)
 echo.
@@ -1824,11 +1887,8 @@ echo.
 echo.
 set /p scrsi= : 
 cls
-(
-echo set scrsi=%scrsi%
-echo exit /b
-) > "%audir%\adbrecordsize.bat"
 goto scrmys2
+
 :scrmys2
 cls
 echo Device Screen Recording 2/3 (size: %scrsi% time: %scrti% seconds)
@@ -1839,12 +1899,9 @@ echo.
 echo.
 set /p scrti= : 
 cls
-(
-echo set scrti=%scrti%
-echo exit /b
-) > "%audir%\adbrecordtime.bat"
 echo.
 goto scrrdy
+
 :scrrdy
 cls
 echo Device Screen recording
@@ -1859,11 +1916,16 @@ echo.
 echo.
 set /p scrmyy= Y / N : 
 cls
-echo.
-IF /i %scrmyy%==Y goto op522
+IF /i %scrmyy%==Y goto scrrdyset
 IF /i %scrmyy%==N goto scrmy
 IF /i %scrmyy%==X goto clsmenu
 goto scrrdy
+
+:scrrdyset
+set scrsi=%scrsi%
+set scrti=%scrti%
+set return=op522
+goto setconfig0
 
 :op522
 cls
@@ -1884,7 +1946,6 @@ IF /i %scrbegin%==X goto clsmenu
 goto op522
 
 :scrbegin1
-IF EXIST "%audir%\sroadbsrpath.bat" call "%audir%\sroadbsrpath.bat"
 cls
 echo Enter desired filename. ex. record.mp4
 echo (avoid spaces and include .mp4!)
@@ -1892,6 +1953,7 @@ echo.
 set /p scrbegin2= : 
 cls
 goto scrbegin11
+
 :scrbegin11
 IF EXIST "%audir%\sroadbsrpath.bat" goto scrp3
 echo  Enter the path to where the file should go.
@@ -1900,7 +1962,8 @@ echo.
 set /p scrp= : 
 cls
 IF EXIST "%tempdir%\db\sroadbdb.bat" call "%tempdir%\db\sroadbdb.bat"
-ping localhost -n 2 >nul
+goto scrp22
+
 :scrp22
 cls
 echo Would you like to set %scrp% as a default save path from now on?
@@ -1912,20 +1975,16 @@ IF /i %scrrv%==N goto scrp3
 goto scrp22
 
 :scrspp
-ping localhost -n 2 >nul
-cls
-(
-echo set scrsp=%scrp%
-echo exit /b
-) > "%audir%\sroadbsrpath.bat"
-goto scrp3
+set scrsp=%scrp%
+set return=%scrp3%
+goto setconfig0
 
 :scrp3
 cls
 echo Recording %scrti% seconds. File will be saved to "%scrp%"
 adb shell screenrecord --size %scrsi% --time-limit %scrti% "%scrp%"/%scrbegin2%
-IF %logst%==YES set /A entries=%entries% + 1
-IF %logst%==YES echo %TIME% %DATE% screen recording "%scrbegin2%" saved to "%scrsp%". >> "%audir%\sroadb-logs.txt"
+IF %logst%==ON set /A entries=%entries% + 1
+IF %logst%==ON echo %TIME% %DATE% screen recording "%scrbegin2%" saved to "%scrsp%". >> "%audir%\sroadb-logs.txt"
 :scrp31
 cls
 echo Success. Would you like to copy %scrbegin2% to your computer?
@@ -1944,8 +2003,8 @@ rem BrowseFolder
 IF %result%==0 set opcode=Screen record file push destination.
 IF %result%==0 goto opcancel
 adb pull %scrp%/%scrbegin2% "%result%"
-IF %logst%==YES set /A entries=%entries% + 1
-IF %logst%==YES echo %TIME% %DATE% "%scrsp%/%scrbegin2%" copied to "%result%". >> "%audir%\sroadb-logs.txt"
+IF %logst%==ON set /A entries=%entries% + 1
+IF %logst%==ON echo %TIME% %DATE% "%scrsp%/%scrbegin2%" copied to "%result%". >> "%audir%\sroadb-logs.txt"
 echo.
 goto op52
 
@@ -1956,8 +2015,8 @@ rem BrowseFolder
 IF %result%==0 set opcode=Screenshot file push destination.
 IF %result%==0 goto opcancel
 adb pull %scrsp%/%screen% "%result%"
-IF %logst%==YES set /A entries=%entries% + 1
-IF %logst%==YES echo %TIME% %DATE% "%scrsp%/%screen%" copied to "%result%". >> "%audir%\sroadb-logs.txt"
+IF %logst%==ON set /A entries=%entries% + 1
+IF %logst%==ON echo %TIME% %DATE% "%scrsp%/%screen%" copied to "%result%". >> "%audir%\sroadb-logs.txt"
 echo.
 goto op51
 
@@ -1976,8 +2035,8 @@ cls
 echo Shutting down device..
 ping localhost -n 3 >nul
 adb shell reboot -p
-IF %logst%==YES set /A entries=%entries% + 1
-IF %logst%==YES echo %TIME% %DATE% device shutdown. >> "%audir%\sroadb-logs.txt"
+IF %logst%==ON set /A entries=%entries% + 1
+IF %logst%==ON echo %TIME% %DATE% device shutdown. >> "%audir%\sroadb-logs.txt"
 ping localhost -n 2 >nul
 echo Success.
 goto menu
@@ -2005,8 +2064,8 @@ cls
 echo Restarting device..
 ping localhost -n 3 >nul
 adb shell reboot
-IF %logst%==YES set /A entries=%entries% + 1
-IF %logst%==YES echo %TIME% %DATE% device reboot. >> "%audir%\sroadb-logs.txt"
+IF %logst%==ON set /A entries=%entries% + 1
+IF %logst%==ON echo %TIME% %DATE% device reboot. >> "%audir%\sroadb-logs.txt"
 ping localhost -n 3 >nul
 echo Success.
 echo.
@@ -2017,8 +2076,8 @@ cls
 echo Rebooting to Recovery...
 ping localhost -n 3 >nul
 adb shell reboot recovery
-IF %logst%==YES set /A entries=%entries% + 1
-IF %logst%==YES echo %TIME% %DATE% device reboot to recovery. >> "%audir%\sroadb-logs.txt"
+IF %logst%==ON set /A entries=%entries% + 1
+IF %logst%==ON echo %TIME% %DATE% device reboot to recovery. >> "%audir%\sroadb-logs.txt"
 ping localhost -n 3 >nul
 echo Success.
 echo.
@@ -2029,8 +2088,8 @@ cls
 echo Rebooting to Bootloader...
 ping localhost -n 3 >nul
 adb shell reboot bootloader
-IF %logst%==YES set /A entries=%entries% + 1
-IF %logst%==YES echo %TIME% %DATE% device reboot to bootloader. >> "%audir%\sroadb-logs.txt"
+IF %logst%==ON set /A entries=%entries% + 1
+IF %logst%==ON echo %TIME% %DATE% device reboot to bootloader. >> "%audir%\sroadb-logs.txt"
 ping localhost -n 3 >nul
 echo Success.
 echo.
@@ -2403,13 +2462,9 @@ IF /i %stacmd%==back goto runtimesettings
 goto staconf
 
 :staconf2
-cls
-(
-echo set startupcmd=%stacmd%
-echo exit /b
-) > "%tempdir%\SuroADB\sroadbstt.bat"
-ping localhost -n 2 >nul
-goto staconf
+set startupcmd=%stacmd%
+set return=staconf
+goto setconfig0
 
 
 
@@ -2462,7 +2517,7 @@ cls
 echo Would you like to delete all SuroADB files and data?
 echo.
 echo Be noted that the pre-compiled files will be extracted again if
-echo SuroADB is started.
+echo SuroADB.exe is started.
 echo.
 echo.
 set /p unprompt= Y / N : 
@@ -2589,14 +2644,12 @@ cls
 echo What should be fixed?
 echo.
 echo  CD : 'adb is not recognized as an internal command'
-echo  RD : change working directory
 echo  XX  : revert to default working directory
 echo.
 echo  X  : return to menu
 set /p troubles= : 
 cls
 IF /i %troubles%==CD goto repathq
-IF /i %troubles%==RD goto repath1
 IF /i %troubles%==XX goto cdef
 IF /i %troubles%==X goto suroadbm
 goto trouble
@@ -2622,61 +2675,8 @@ echo and i'll help you.
 echo.
 goto troble2
 
-:repath1
-cls
-echo Working directory changer
-echo.
-echo NOTE:  Working directory changing is obsolete and unstable!
-echo SuroADB relies heavily on it's default working directory
-echo because auto-restore files and other functions are
-echo hard-coded with it. Do not expect everything to work fine
-echo after changing! If you encounter problems, revert to default.
-echo.
-echo Current working directory:
-cd
-echo.
-echo Change it now?
-echo.
-set /p rpth= Y / N : 
-IF /i %rpth%==Y goto repath2
-IF /i %rpth%==N goto trouble
-goto repath1
-
-:repath2
-cls
-:repath3
-echo Choose the new working directory.
-echo.
-echo.
-REM BrowseFolder
-IF %result%==0 set opcode=Working Directory reset.
-IF %result%==0 goto opcancel
-ping localhost -n 2 >nul
-COPY /Y "%MYFILES%" "%result%"
-cls
-cd %result%
-IF NOT "%cd%"=="%result%" echo Error! Path is read protected or it's not in %HOMEDRIVE% drive
-IF NOT "%cd%"=="%result%" echo Please select a different directory that's in the %HOMEDRIVE% drive.
-IF NOT "%cd%"=="%result%" echo.
-IF NOT "%cd%"=="%result%" goto repath3
-ping localhost -n 2 >nul
-cls
-(
-echo set sroadbcd=%result%
-echo exit /b
-) > "%audir%\sroadbcd.bat"
-cls
-echo Success. SuroADB will now CD to this directory
-echo in each start.
-echo.
-pause
-goto clsmenu
 
 :cfgset
-set sdconfig=NOT_SET
-set exsdconfig=NOT_SET
-IF EXIST "%audir%\sroadbsdconfig.bat" call "%audir%\sroadbsdconfig.bat"
-IF EXIST "%audir%\sroadbexsdconfig.bat" call "%audir%\sroadbexsdconfig.bat"
 cls
 echo SuroADB Path Configs
 echo.
@@ -2701,10 +2701,12 @@ echo Please do not close it with a slash ( / ) at the end.
 echo.
 set /p sdconfig= : 
 cls
-IF EXIST "%tempdir%\db\sroadbdb.bat" call "%tempdir%\db\sroadbdb.bat"
-ping localhost -n 2 >nul
-echo set sdconfig=%sdconfig% > "%audir%\sroadbsdconfig.bat"
-goto cfgset
+IF EXIST "%tempdir%\db\sroadbdb.bat" call "%tempdir%\db\sroadbdb.bat
+
+set sdconfig=%sdconfig%
+set return=cfgset
+goto setconfig0
+
 :excfg
 cls
 echo Enter the path to your EXTERNAL storage. (ex. /storage/sdcard0)
@@ -2714,9 +2716,9 @@ echo.
 set /p exsdconfig= : 
 cls
 IF EXIST "%tempdir%\db\sroadbdb.bat" call "%tempdir%\db\sroadbdb.bat"
-ping localhost -n 2 >nul
-echo set exsdconfig=%exsdconfig% > "%audir%\sroadbexsdconfig.bat"
-goto cfgset
+set exsdconfig=%exsdconfig%
+set return=cfgset
+goto setconfig0
 
 
 :debugm
@@ -2744,12 +2746,12 @@ goto debugm2
 :debugm2
 IF NOT EXIST "%tempdir%\SuroADB-DEBUG" MKDIR "%tempdir%\SuroADB-DEBUG"
 IF NOT EXIST "%audir%\sroadbsdconfig.bat" goto debugsd
-echo suroadb %version% > "%tempdir%\SuroADB-DEBUG\sroadbdebugtest.txt"
+echo SuroADB %version% %betabuildno% > "%tempdir%\SuroADB-DEBUG\sroadbdebugtest.txt"
 adb devices
 adb push "%tempdir%\SuroADB-DEBUG\sroadbdebugtest.txt" "/sdcard"
 cls
 (
-echo SuroADB Version %version% DEBUG
+echo SuroADB %version% build %betabuildno% DEBUG
 echo.
 echo Test time : %DATE% %TIME%
 echo.
@@ -2786,25 +2788,21 @@ IF /i %logq%==xx goto suroadbm
 goto logg
 :switch
 cls
-IF %logst%==YES goto logno
-IF %logst%==NO goto logyes
-:logyes
-IF EXIST "%audir%\sroadblogs.bat" DEL /Q "%audir%\sroadblogs.bat"
-set logst=YES
-cls
+IF %logst%==ON goto logno
+IF %logst%==OFF goto logyes
+set logst=ERROR_UNABLE_TO_SET_VARIABLES
 goto logg
+
 :logno
-IF NOT EXIST "%audir%\sroadblogs.bat" goto lognoo
-:lognoo
-ping localhost -n 2 >nul
-cls
-(
-echo set logst=NO
-echo exit /b
-) > "%audir%\sroadblogs.bat"
-set logst=NO
-cls
-goto logg
+set logst=OFF
+set return=logg
+goto setconfig0
+
+:logyes
+set logst=ON
+set return=logg
+goto setconfig0
+
 
 :defl
 cls
@@ -2833,7 +2831,7 @@ echo.
 set /p def11= : 
 IF /i %def11%==sv DEL /Q "%MYFILES%\sroadb%filerawver%w.txt"
 IF /i %def11%==sw DEL /Q "%audir%\sroadbcd.bat"
-IF /i %def11%==log set logst=YES
+IF /i %def11%==log set logst=ON
 IF /i %def11%==log DEL /Q "%audir%\sroadblogs.bat"
 IF /i %def11%==col set diode=f0
 IF /i %def11%==col DEL /Q "%audir%\sroadbcol.bat"
@@ -2869,7 +2867,7 @@ IF EXIST "%audir%\adbrecordtime.bat" echo ADB recording time set to default
 IF EXIST "%audir%\adbrecordtime.bat" DEL /Q "%audir%\adbrecordtime.bat"
 IF EXIST "%audir%\adbrecordsize.bat" echo ADB recording size set to default
 IF EXIST "%audir%\adbrecordsize.bat" DEL /Q "%audir%\adbrecordsize.bat"
-IF EXIST "%audir%\sroadblogs.bat" set logst=YES
+IF EXIST "%audir%\sroadblogs.bat" set logst=ON
 IF EXIST "%audir%\sroadblogs.bat" echo SuroADB logs enabled
 IF EXIST "%audir%\sroadblogs.bat" DEL /Q "%audir%\sroadblogs.bat"
 IF EXIST "%audir%\sroadbexportpk.bat" echo Packages always export list dialog restored
@@ -2921,17 +2919,12 @@ IF /i %diodeset%==MENU goto suroadbm
 goto colorsetconfig
 
 :colorsetconfig
-cls
-(
-echo set diode=%diodeset%
-echo exit /b
-) > "%audir%\sroadbcol.bat"
-cls
 set diode=%diodeset%
 color %diode%
 IF %ERRORLEVEL%==1 set rest=cols
 IF %ERRORLEVEL%==1 goto restore
-goto interfacemenu
+set return=interfacemenu
+goto setconfig0
 
 
 :updt
@@ -2941,7 +2934,7 @@ cls
 :updt1
 echo Update checking
 echo.
-echo This will check if an update exceeding Version %version% %betabuildno% is available.
+echo This will check if an update exceeding SuroADB %version% build %betabuildno% is available.
 echo.
 echo This will also download the latest database.
 echo.
@@ -2982,7 +2975,6 @@ goto updt
 :: Some more personal stuff
 
 :faq
-IF EXIST "%tempdir%\SuroADB\sroadb-counter.bat" CALL "%tempdir%\SuroADB\sroadb-counter.bat"
 cls
 echo.
 echo    Thank you for using SuroADB!
