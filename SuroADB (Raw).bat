@@ -2,13 +2,13 @@
 
 
 :versioninfo
-:: VERSION INFO 
+:: VERSION INFO, changed in each release
 set version=14
 set newver=%version%
 set rawver=14
-set betabuild=14A
+set betabuild=14B
 set betabuildno=%betabuild%
-set filerawver=14
+set filerawver=%rawver%
 
 
 :verydeeprestart
@@ -41,34 +41,27 @@ goto setconfigdefault
 set entries=0
 set trost=0
 set sessionid=%random%
-
 :: color
 set diode=3f
 :: logging
 set logst=ON
 :: custom startup
 set startupcmd=menu
-
 :: configs
 set sdconfig=/sdcard
 set exsdconfig=NOT_SET
-
 :: wifi mode
 set deviceip=NOT_SET
 
 :: (PATH VARIABLES)
-
 :: working directory
 set wdre=%MYFILES%
 set audir=%MYFILES%\SuroADB
 set tempdir=%MYFILES%\sroadbtemp
-
 :: for apk install
 set instal=%tempdir%\Apk
-
 :: for package list
 set exportpackage=no
-
 :: for file push and pullf
 set pullf=NOT_SET
 set pushf=NOT_SET
@@ -77,7 +70,6 @@ set scrsp=NOT_SET
 set scrp=NOT_SET
 set scrsi=1280x720
 set scrti=180
-
 
 echo %TIME% %DATE% Default settings set >> "%tempdir%\SuroADB\sroadb-runtime.txt"
 IF EXIST "%audir%\srodb-settings.bat" goto setconfig
@@ -126,7 +118,6 @@ goto opstartup
 :: (Directory setup moved to lines 30~)
 
 :: This will create the version info file for update checking
-echo %TIME% %DATE% Creating verinfo for %version% %betabuildno% >> "%tempdir%\SuroADB\sroadb-runtime.txt"
 (
 echo set version=%version%
 echo set newver=%version%
@@ -136,6 +127,7 @@ echo set betabuildno=%betabuildno%
 echo set filerawver=%filerawver%
 echo exit /b
 ) > "%MYFILES%\sroadbverinfo.bat"
+echo %TIME% %DATE% Verinfo created for SuroADB %version% build %betabuildno% >> "%tempdir%\SuroADB\sroadb-runtime.txt"
 
 
 :: This will start SuroADB!Beta.exe, if available
@@ -1737,10 +1729,10 @@ echo ex. %sdconfig%
 echo.
 echo to cancel operation, enter MENU
 echo.
-set /p pushf= : 
-IF /i %pushf%=MENU RD /S /Q "%tempdir%\Push"
-IF /i %pushf%=MENU goto clsmenu
+set /p pushf= :
 cls
+IF /i %pushf%==MENU RD /S /Q "%tempdir%\Push"
+IF /i %pushf%==MENU goto clsmenu
 IF EXIST "%tempdir%\db\sroadbdb.bat" call "%tempdir%\db\sroadbdb.bat"
 ping localhost -n 2 >nul
 cls
@@ -1813,7 +1805,7 @@ echo Enter MENU to go back to menu.
 echo.
 set /p screen= : 
 cls
-IF /i %screen%==menu goto clsmenu
+IF /i %screen%==MENU goto clsmenu
 goto op51path
 
 :op51path
