@@ -130,3 +130,6 @@ a single file to be called to change settings
 - minor adjustments and improvements to runtime
 - removed custom directory changer as it's obsolete
 - completely broke the defaults manager in settings (kek)
+
+:: SuroADB 14 11319 (BETA B)
+- fixed =menu error in file push workaround
