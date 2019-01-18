@@ -26,6 +26,7 @@ IF %rawver%==12 set ov=1
 IF %rawver%==121 set ov=1
 IF %rawver%==13 set ov=1
 IF %rawver%==131 set ov=1
+IF %rawver%==14 set ov=1
 IF %betabuild%==121A set bv=1
 IF %betabuild%==121B set bv=1
 IF %betabuild%==121C set bv=1
@@ -38,4 +39,6 @@ IF %betabuild%==13D set bv=1
 IF %betabuild%==13E set bv=1
 IF %betabuild%==131A set bv=1
 IF %betabuild%==131B set bv=1
+IF %betabuild%==14A set bv=1
+IF %betabuild%==14B set bv=1
 exit /b
