@@ -1,12 +1,12 @@
-set newver=13.1
-set rawver=131
+set newver=14
+set rawver=14
 set betabuild=14B
 set linea===========================================================
 set lineb=Notes:
-set linec= - added a workaround for file push filename error
-set lined=   - can detect if file has spaces
-set linee= - minor adjustments for settings and screenrecord ui
-set linef= - fixed and improved error logging
+set linec= - (HOTFIX) fixed =menu error in file push workaround
+set lined= - COMPLETE REVAMP OF SETTINGS! No backwards compatibility
+set linee=   though.
+set linef= - improvements for runtime 
 set lineg=echo more info: bit.ly/suroadbreleasenotes
 set lineh=echo ==========================================================
 set linei=
