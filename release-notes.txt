@@ -2,7 +2,26 @@
 SuroADB Release Notes          kutsuro.simdif.com | suroadb.jimdofree.com
 ====================================================================================
 Latest:
-1/3/19 - 2019!
+1/19/19 - 14 HOTFIX and Setting revamp
+              - (HOTFIX) fixed =menu error in file push workaround
+              - completely reworked how suroadb saves and reads data and preferences, now relies on a
+              single file to be called to change settings!
+              - added more logging commands to runtime
+              - minor adjustments and improvements to runtime
+              - removed custom directory changer as it's obsolete
+              - completely broke the defaults manager in settings (kek)
+
+              I have reworked how SuroADB saves and reads data to reduce clutter for it's data folders. Be wary though, as this
+              change was rushed. Bugs and nasty crashes might happen.. If you do encounter any, please
+              open an issue discussion at https://github.com/nicamoq/SuroADB/issues/new
+              
+              The defaults manager (that neat default setting organizer) (yes, that one) is unusable at the moment. Sorry!
+              
+              
+
+
+
+1/3/19 - 13.1 2019!
               - added a workaround for file push filename error!
                |- can detect if file has spaces
                |- switches to workaround that copies the folder (Push) containing the file to directory of your choosing
@@ -19,8 +38,6 @@ Latest:
               
               Happy New Year!
               
-              
-
 11/28/18 - 13 December!
               - added options for runtime (startup) in settings
                • configure what command SuroADB starts after startup
