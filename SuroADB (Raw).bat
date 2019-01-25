@@ -527,10 +527,7 @@ IF /i %sroc2%==N goto conft
 goto oldvergen
 
 :oldvergen2
-DEL /Q "%MYFILES%\sroadb11w.txt"
-DEL /Q "%MYFILES%\sroadb111w.txt"
-DEL /Q "%MYFILES%\sroadb12w.txt"
-DEL /Q "%MYFILES%\sroadb121w.txt"
+DEL /Q "%MYFILES%\sroadb14w.txt"
 title SuroADB %version%
 cls
 echo You've been using SuroADB %localver%. Great!
