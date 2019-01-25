@@ -133,3 +133,27 @@ a single file to be called to change settings
 
 :: SuroADB 14 11319 (BETA B)
 - fixed =menu error in file push workaround
+
+>>:: SuroADB 14.1
+
+:: SuroADB 14.1 12319 (BETA A)
+- fixed first run suddenly exiting error from SuroADB 14
+- added settings for the shortcut feature
+- added shortcut feature for menu and settings menu to execute commands
+    ex. entering "folder" in the main or settings menu will prompt you to folder push directly
+    apk = prompts you to select apk for NORMAL apk installation
+    apks = prompts you to select apk for SDCARD apk installation
+    apkr = prompts you to select apk to REPLACE an existing application
+    apkg = prompts you to select apk to GRANT it all runtime permissions
+    folder = prompts you to select a folder for push
+    file = prompts you to select a file for push
+    sc = takes a screenshot of your device's screen and saves the file to /sdcard/
+    system = reboots device to it's SYSTEM
+    recovery = reboots device to RECOVERY mode
+    bootloader = reboots device to it's BOOTLOADER
+  
+  
+  
+  
+  
+  

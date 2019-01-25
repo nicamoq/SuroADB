@@ -3,10 +3,10 @@
 
 :versioninfo
 :: VERSION INFO, changed in each release
-set version=14
+set version=14.1
 set newver=%version%
-set rawver=14
-set betabuild=14B
+set rawver=141
+set betabuild=141A
 set betabuildno=%betabuild%
 set filerawver=%rawver%
 
@@ -41,6 +41,7 @@ goto setconfigdefault
 set entries=0
 set trost=0
 set sessionid=%random%
+set exports=0
 :: color
 set diode=3f
 :: logging
@@ -73,7 +74,7 @@ set scrti=180
 
 echo %TIME% %DATE% Default settings set >> "%tempdir%\SuroADB\sroadb-runtime.txt"
 IF EXIST "%audir%\srodb-settings.bat" goto setconfig
-IF NOT EXIST "%audir%\srodb-settings.bat" goto setconfig0
+IF NOT EXIST "%audir%\srodb-settings.bat" goto setconfig
 
 
 :: This applies all settings into sroadb-settings.bat
@@ -109,7 +110,8 @@ set scrti=180
 
 echo exit /b
 ) > %audir%\srodb-settings.bat
-echo %TIME% %DATE% Settings applied and exported >> "%tempdir%\SuroADB\sroadb-runtime.txt"
+set /A exports=%exports% + 1
+echo %TIME% %DATE% Settings applied and exported (%exports%) >> "%tempdir%\SuroADB\sroadb-runtime.txt"
 IF EXIST "%audir%\srodb-settings.bat" CALL "%audir%\srodb-settings.bat"
 goto %return%
 goto opstartup
@@ -459,6 +461,9 @@ IF EXIST "%MYFILES%\sroadb13w.txt" set localver=13
 IF EXIST "%MYFILES%\sroadb13w.txt" goto oldvergen
 IF EXIST "%MYFILES%\sroadb131w.txt" set localver=13.1
 IF EXIST "%MYFILES%\sroadb131w.txt" goto oldvergen
+
+IF EXIST "%MYFILES%\sroadb14w.txt" set localver=14
+IF EXIST "%MYFILES%\sroadb14w.txt" goto oldvergen2
 goto conft
 
 
@@ -472,7 +477,7 @@ DEL /Q "%MYFILES%\sroadb91w.txt"
 DEL /Q "%MYFILES%\sroadb10w.txt"
 DEL /Q "%MYFILES%\sroadb101w.txt"
 cls
-:oldver2
+echo %TIME% %DATE% Version %localver% detected >> "%tempdir%\SuroADB\sroadb-runtime.txt"
 title SuroADB %version%
 cls
 echo I see you have used SuroADB %localver% before!
@@ -499,9 +504,9 @@ DEL /Q "%MYFILES%\sroadb12w.txt"
 DEL /Q "%MYFILES%\sroadb121w.txt"
 DEL /Q "%MYFILES%\sroadb13w.txt"
 DEL /Q "%MYFILES%\sroadb131w.txt"
+cls
 echo %TIME% %DATE% Version %localver% detected >> "%tempdir%\SuroADB\sroadb-runtime.txt"
 title SuroADB %version%
-cls
 echo You've been using SuroADB %localver%. Great!
 echo.
 echo Starting in SuroADB 14, the way SuroADB reads and saves
@@ -520,6 +525,31 @@ IF /i %sroc2%==Y start %audir%
 IF /i %sroc2%==Y goto conft
 IF /i %sroc2%==N goto conft
 goto oldvergen
+
+:oldvergen2
+DEL /Q "%MYFILES%\sroadb11w.txt"
+DEL /Q "%MYFILES%\sroadb111w.txt"
+DEL /Q "%MYFILES%\sroadb12w.txt"
+DEL /Q "%MYFILES%\sroadb121w.txt"
+title SuroADB %version%
+cls
+echo You've been using SuroADB %localver%. Great!
+echo.
+echo I would really appreciate any kind of message regarding
+echo SuroADB, for example, an angry one regarding the slow
+echo updates! :D
+echo.
+echo You can input a fake email.. I don't mind! You can leave
+echo an anonymous message on my website's contact page.
+echo.
+echo I won't bother you anymore after this. I promise!
+echo.
+set /p sroc2= Please!? Y / N : 
+cls
+IF /i %sroc2%==Y start https://suroadb.jimdofree.com/contact/
+IF /i %sroc2%==Y goto conft
+IF /i %sroc2%==N goto conft
+goto oldvergen2
 
 
 :conft
@@ -1032,6 +1062,22 @@ IF /i %main%==help goto helpmenu
 IF /i %main%==exit goto exitp
 IF /i %main%==restart goto deeprestart
 IF /i %main%==settings goto suroadbm
+
+:: SH FOR INSTALL
+IF /i %main%==apk goto apkinstallH
+IF /i %main%==apks goto apkinstallS
+IF /i %main%==apkr goto apkinstallR
+IF /i %main%==apkg goto apkinstallG
+:: SH for PUSH
+IF /i %main%==folder goto pushf2
+IF /i %main%==file goto pushf3
+:: SH for SCREENSHOT
+IF /i %main%==sc goto scsh
+:: SH for POWER
+IF /i %main%==system goto op81
+IF /i %main%==recovery goto recv
+IF /i %main%==bootloader goto btld
+
 :errorm
 cls
 echo ERROR: The command does not exist or there's a mistype.
@@ -1070,12 +1116,28 @@ IF /i %main%==help goto helpmenu
 IF /i %main%==exit goto exitp
 IF /i %main%==restart goto deeprestart
 IF /i %main%==settings goto suroadbm
+
+:: SH FOR INSTALL
+IF /i %main%==apk goto apkinstallH
+IF /i %main%==apks goto apkinstallS
+IF /i %main%==apkr goto apkinstallR
+IF /i %main%==apkg goto apkinstallG
+:: SH for PUSH
+IF /i %main%==folder goto pushf2
+IF /i %main%==file goto pushf3
+:: SH for SCREENSHOT
+IF /i %main%==sc goto scsh
+:: SH for POWER
+IF /i %main%==system goto op81
+IF /i %main%==recovery goto recv
+IF /i %main%==bootloader goto btld
+
+
 :errorm
 cls
 echo ERROR: The command does not exist or there's a mistype.
 echo.
 goto menu
-
 
 
 :: EXPERIMENTAL!
@@ -1825,12 +1887,18 @@ IF %logst%==ON echo %TIME% %DATE% screenshot "%screen%" saved to "%scrsp%". >> "
 :scrp2
 IF NOT %scrsp%==NOT_SET goto goto scrsps
 cls
-echo Would you like to set %scrsp% as a default save path from now on?
+echo Would you like to set %scrsp% as a default save path for screenshots from now on?
 echo.
 set /p scrsv=Y / N : 
 cls
 IF /i %scrsv%==Y goto scrspp
 IF /i %scrsv%==N goto scrsps
+goto scrp2
+
+:scsh
+set screen=adbscreenshot-%random%-%sessionid%.png
+adb shell screencap "/sdcard/%screen%"
+set scrsp=/sdcard
 goto scrp2
 
 :scrspp
@@ -2127,6 +2195,22 @@ IF /i %helpnemu%==adb goto hadb
 IF /i %helpnemu%==menu goto clsmenu
 IF /i %helpnemu%==shell goto hshell
 IF /i %helpnemu%==wifi goto whelp
+
+:: SH FOR INSTALL
+IF /i %helpnemu%==apk goto apkinstallH
+IF /i %helpnemu%==apks goto apkinstallS
+IF /i %helpnemu%==apkr goto apkinstallR
+IF /i %helpnemu%==apkg goto apkinstallG
+:: SH for PUSH
+IF /i %helpnemu%==folder goto pushf2
+IF /i %helpnemu%==file goto pushf3
+:: SH for SCREENSHOT
+IF /i %helpnemu%==sc goto scsh
+:: SH for POWER
+IF /i %helpnemu%==system goto op81
+IF /i %helpnemu%==recovery goto recv
+IF /i %helpnemu%==bootloader goto btld
+
 goto helpmenu
 
 
@@ -2312,7 +2396,7 @@ echo SuroADB Settings
 echo.
 echo    color (change color scheme)
 echo    ui (UI settings)
-echo    def (change things to default)
+echo    def (change things to default) (broken)
 echo    config (sdcard directories)
 echo    update
 echo    logs (set logging on/off, view all logs)
@@ -2344,6 +2428,22 @@ IF /i %srodb%==troubleshoot goto trouble
 IF /i %srodb%==debug goto debugm
 IF /i %srodb%==uninstall goto srouninstall
 IF /i %srodb%==runtime goto runtimesettings
+
+:: SH FOR INSTALL
+IF /i %srodb%==apk goto apkinstallH
+IF /i %srodb%==apks goto apkinstallS
+IF /i %srodb%==apkr goto apkinstallR
+IF /i %srodb%==apkg goto apkinstallG
+:: SH for PUSH
+IF /i %srodb%==folder goto pushf2
+IF /i %srodb%==file goto pushf3
+:: SH for SCREENSHOT
+IF /i %srodb%==sc goto scsh
+:: SH for POWER
+IF /i %srodb%==system goto op81
+IF /i %srodb%==recovery goto recv
+IF /i %srodb%==bootloader goto btld
+
 goto suroadbm
 
 :csuroadbm
@@ -2354,7 +2454,7 @@ echo    UI Settings:
 echo    color : ui
 echo.
 echo    Defaults, Directories, and Logging:
-echo    def : config : temp : logs
+echo    def (broken) : config : temp : logs
 echo.
 echo    Updates and Troubleshooting:
 echo    update : troubleshoot : debug
@@ -2384,6 +2484,22 @@ IF /i %srodb%==troubleshoot goto trouble
 IF /i %srodb%==debug goto debugm
 IF /i %srodb%==uninstall goto srouninstall
 IF /i %srodb%==runtime goto runtimesettings
+
+:: SH FOR INSTALL
+IF /i %srodb%==apk goto apkinstallH
+IF /i %srodb%==apks goto apkinstallS
+IF /i %srodb%==apkr goto apkinstallR
+IF /i %srodb%==apkg goto apkinstallG
+:: SH for PUSH
+IF /i %srodb%==folder goto pushf2
+IF /i %srodb%==file goto pushf3
+:: SH for SCREENSHOT
+IF /i %srodb%==sc goto scsh
+:: SH for POWER
+IF /i %srodb%==system goto op81
+IF /i %srodb%==recovery goto recv
+IF /i %srodb%==bootloader goto btld
+
 goto suroadbm
 
 
