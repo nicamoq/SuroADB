@@ -152,9 +152,10 @@ a single file to be called to change settings
     recovery = reboots device to RECOVERY mode
     bootloader = reboots device to it's BOOTLOADER
   
-:: SuroADB 14.1 12519 (BETA B)
+:: SuroADB 14.1 12519 (BETA B) (released as BETA A)
 - fixed feedback ui repeating if sroadb14w.txt detected
   
-  
+:: SuroADB 14.1 12719 (BETA C) (REL)
+- removed some text from SuroADB's info page
   
   

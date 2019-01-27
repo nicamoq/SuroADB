@@ -6,7 +6,7 @@
 set version=14.1
 set newver=%version%
 set rawver=141
-set betabuild=141A
+set betabuild=141C
 set betabuildno=%betabuild%
 set filerawver=%rawver%
 
@@ -461,7 +461,6 @@ IF EXIST "%MYFILES%\sroadb13w.txt" set localver=13
 IF EXIST "%MYFILES%\sroadb13w.txt" goto oldvergen
 IF EXIST "%MYFILES%\sroadb131w.txt" set localver=13.1
 IF EXIST "%MYFILES%\sroadb131w.txt" goto oldvergen
-
 IF EXIST "%MYFILES%\sroadb14w.txt" set localver=14
 IF EXIST "%MYFILES%\sroadb14w.txt" goto oldvergen2
 goto conft
@@ -521,8 +520,7 @@ echo Would you like to do that now?
 echo.
 set /p sroc2= Y / N : 
 cls
-IF /i %sroc2%==Y start %audir%
-IF /i %sroc2%==Y goto conft
+IF /i %sroc2%==Y goto srouninstall3
 IF /i %sroc2%==N goto conft
 goto oldvergen
 
@@ -1893,9 +1891,9 @@ IF /i %scrsv%==N goto scrsps
 goto scrp2
 
 :scsh
+set scrsp=/sdcard
 set screen=adbscreenshot-%random%-%sessionid%.png
 adb shell screencap "/sdcard/%screen%"
-set scrsp=/sdcard
 goto scrp2
 
 :scrspp
@@ -3082,18 +3080,9 @@ goto updt
 :faq
 cls
 echo.
-echo    Thank you for using SuroADB!
+echo    Thank you for using SuroADB! =D
 echo.
-echo    This is a small non-profit project i've been working on since May 20 2018
 echo.
-echo    It's my first time starting a programming project.
-echo    You could say that this is a pointless journey, where I carelessly
-echo    work for something very hard, wearing myself out for no profit. 
-echo.
-echo    But in reality, I learn from what I'm currently doing. And the joy
-echo    I get seeing other people using something I worked countless
-echo    hours for is the best feeling ever!
-echo. 
 echo    You are using version %version% Build %betabuild%
 echo    You have used SuroADB %trost% times so far.
 echo.
