@@ -3,10 +3,10 @@ set rawver=141
 set betabuild=141C
 set linea===========================================================
 set lineb=Notes:
-set linec= - (HOTFIX) fixed =menu error in file push workaround
-set lined= - COMPLETE REVAMP OF SETTINGS! No backwards compatibility
-set linee=   though.
-set linef= - improvements for runtime 
+set linec= - (HOTFIX) fixed first run crash for SuroADB 14
+set lined= - added shortcuts, instant command execution
+set linee=   through keywords
+set linef=  
 set lineg=echo more info: bit.ly/suroadbreleasenotes
 set lineh=echo ==========================================================
 set linei=
@@ -27,7 +27,6 @@ IF %rawver%==121 set ov=1
 IF %rawver%==13 set ov=1
 IF %rawver%==131 set ov=1
 IF %rawver%==14 set ov=1
-IF %rawver%==141 set ov=1
 IF %betabuild%==121A set bv=1
 IF %betabuild%==121B set bv=1
 IF %betabuild%==121C set bv=1
@@ -41,5 +40,4 @@ IF %betabuild%==13E set bv=1
 IF %betabuild%==131A set bv=1
 IF %betabuild%==131B set bv=1
 IF %betabuild%==14A set bv=1
-IF %betabuild%==141C set bv=1
 exit /b
