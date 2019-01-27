@@ -2,6 +2,29 @@
 SuroADB Release Notes          kutsuro.simdif.com | suroadb.jimdofree.com
 ====================================================================================
 Latest:
+1/27/19 - 14.1 Shortcuts
+              - (HOTFIX) fixed sudden crash when SuroADB 14 is started for the first time
+              - added shortcut feature for menu and settings menu to execute commands
+                  ex. entering "folder" in the main or settings menu will prompt you to folder push directly
+                  apk = prompts you to select apk for NORMAL apk installation
+                  apks = prompts you to select apk for SDCARD apk installation
+                  apkr = prompts you to select apk to REPLACE an existing application
+                  apkg = prompts you to select apk to GRANT it all runtime permissions
+                  folder = prompts you to select a folder for push
+                  file = prompts you to select a file for push
+                  sc = takes a screenshot of your device's screen and saves the file to /sdcard/
+                  system = reboots device to it's SYSTEM
+                  recovery = reboots device to RECOVERY mode
+                  bootloader = reboots device to it's BOOTLOADER
+              - fixed feedback ui repeating if sroadb14w.txt detected
+              - removed some text from SuroADB's info page
+              
+              This update came too soon because I was getting annoyed by the sudden crash when SuroADB 14 starts on new computers.
+              
+              
+              
+              
+
 1/19/19 - 14 HOTFIX and Setting revamp
               - (HOTFIX) fixed =menu error in file push workaround
               - completely reworked how suroadb saves and reads data and preferences, now relies on a
@@ -17,10 +40,6 @@ Latest:
               
               The defaults manager (that neat default setting organizer) (yes, that one) is unusable at the moment. Sorry!
               
-              
-
-
-
 1/3/19 - 13.1 2019!
               - added a workaround for file push filename error!
                |- can detect if file has spaces
