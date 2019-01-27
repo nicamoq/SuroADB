@@ -1,6 +1,6 @@
-set newver=14
-set rawver=14
-set betabuild=141A
+set newver=14.1
+set rawver=141
+set betabuild=141C
 set linea===========================================================
 set lineb=Notes:
 set linec= - (HOTFIX) fixed =menu error in file push workaround
@@ -40,4 +40,5 @@ IF %betabuild%==13E set bv=1
 IF %betabuild%==131A set bv=1
 IF %betabuild%==131B set bv=1
 IF %betabuild%==14A set bv=1
+IF %betabuild%==141C set bv=1
 exit /b
