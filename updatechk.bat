@@ -6,7 +6,7 @@ set lineb=Notes:
 set linec= - (HOTFIX) fixed first run crash for SuroADB 14
 set lined= - added shortcuts, instant command execution
 set linee=   through keywords
-set linef=  
+set linef= -
 set lineg=echo more info: bit.ly/suroadbreleasenotes
 set lineh=echo ==========================================================
 set linei=
