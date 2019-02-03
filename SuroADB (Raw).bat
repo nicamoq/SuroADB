@@ -3,10 +3,10 @@
 
 :versioninfo
 :: VERSION INFO, changed in each release
-set version=14.1
+set version=15
 set newver=%version%
-set rawver=141
-set betabuild=141C
+set rawver=15
+set betabuild=15A
 set betabuildno=%betabuild%
 set filerawver=%rawver%
 
@@ -113,6 +113,7 @@ echo exit /b
 set /A exports=%exports% + 1
 echo %TIME% %DATE% Settings applied and exported (%exports%) >> "%tempdir%\SuroADB\sroadb-runtime.txt"
 IF EXIST "%audir%\srodb-settings.bat" CALL "%audir%\srodb-settings.bat"
+IF "%return%" == "" goto clsmenu
 goto %return%
 goto opstartup
 
@@ -1637,7 +1638,6 @@ set /p pullf= :
 cls
 IF /i %pullf%==MENU goto clsmenu
 IF EXIST "%tempdir%\db\sroadbdb.bat" call "%tempdir%\db\sroadbdb.bat"
-ping localhost -n 2 >nul
 cls
 echo Select the folder where "%pullf%" will be copied to.
 rem BrowseFolder
