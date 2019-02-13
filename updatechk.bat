@@ -1,11 +1,11 @@
-set newver=14.1
-set rawver=141
+set newver=15
+set rawver=15
 set betabuild=15A
 set linea===========================================================
 set lineb=Notes:
-set linec= - (HOTFIX) fixed first run crash for SuroADB 14
-set lined= - added shortcuts, instant command execution
-set linee=   through keywords
+set linec= - Bug fixes
+set lined= - fixed some other stuff (hopefully)
+set linee= -
 set linef= -
 set lineg=echo more info: bit.ly/suroadbreleasenotes
 set lineh=echo ==========================================================
