@@ -2,6 +2,12 @@
 SuroADB Release Notes          kutsuro.simdif.com | suroadb.jimdofree.com
 ====================================================================================
 Latest:
+2/13/19 - 15 Soft Release
+              - small bug fixes
+              - (hopefully) fixed the sudden errors with Pull and color scheme changer
+
+
+
 1/27/19 - 14.1 Shortcuts
               - (HOTFIX) fixed sudden crash when SuroADB 14 is started for the first time
               - added shortcut feature for menu and settings menu to execute commands
@@ -20,10 +26,6 @@ Latest:
               - removed some text from SuroADB's info page
               
               This update came too soon because I was getting annoyed by the sudden crash when SuroADB 14 starts on new computers.
-              
-              
-              
-              
 
 1/19/19 - 14 HOTFIX and Setting revamp
               - (HOTFIX) fixed =menu error in file push workaround
