@@ -160,7 +160,7 @@ a single file to be called to change settings
 
 >>:: SuroADB 15
 
-:: SuroADB 15 1219
+:: SuroADB 15 1219 (SOFT RELEASE)
 - small bug fixes
 - (hopefully) fixed the sudden errors with Pull and color scheme changer
   
