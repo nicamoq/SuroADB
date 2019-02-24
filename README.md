@@ -5,12 +5,14 @@
   <body>
 <h3>SuroADB Server for update checking and resource downloading.</h3>
 
+<h1>SUROADB LITE (USER INTUITIVE SUROADB INTERFACE): https://github.com/nicamoq/SuroADB-Lite</h1>
+  
 <strong>Note: Only applies to SuroADB 12.1 and up. Previous versions of SuroADB rely
 on pastebin as their download server.</strong>
 
 Official website: https://suroadb.jimdofree.com<br>
 Old but gold: https://suroadb.simdif.com<br>
-My webstie: https://kutsuro.simdif.com<br>
+My website: https://kutsuro.simdif.com<br>
 Github: https://github.com/nicamoq/SuroADB
 
 
