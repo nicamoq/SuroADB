@@ -5,8 +5,8 @@
   <body>
 <h3>SuroADB Server for update checking and resource downloading.</h3>
 
-<h1>This project is discontinued </h1>
-<h1>and has moved to nicamoq/SuroADB-Lite: https://github.com/nicamoq/SuroADB-Lite</h1>
+<h1>This project is discontinued
+and has moved to nicamoq/SuroADB-Lite: https://github.com/nicamoq/SuroADB-Lite</h1>
   
 <strong>Note: Only applies to SuroADB 12.1 and up. Previous versions of SuroADB rely
 on pastebin as their download server.</strong>
