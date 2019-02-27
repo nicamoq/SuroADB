@@ -1,4 +1,4 @@
-set newver=GOODBYE!!
+set newver=Lite
 set rawver=151
 set betabuild=15A
 set linea===========================================================
