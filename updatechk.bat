@@ -1,13 +1,13 @@
-set newver=15
-set rawver=15
+set newver=GOODBYE!!
+set rawver=151
 set betabuild=15A
 set linea===========================================================
-set lineb=Notes:
-set linec= - Bug fixes
-set lined= - fixed some other stuff (hopefully)
-set linee= -
-set linef= -
-set lineg=echo more info: bit.ly/suroadbreleasenotes
+set lineb=ANNOUNCEMENT:
+set linec= SuroADB (Legacy) development has now officially ended.
+set lined= Thank you for using SuroADB!
+set linee= - You may check out the new LITE version of SuroADB which
+set linef= - is more stable! at kutsuro.simdif.com
+set lineg=start https://kutsuro.simdif.com/suroadb.html
 set lineh=echo ==========================================================
 set linei=
 set linej=
