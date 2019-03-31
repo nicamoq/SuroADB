@@ -7,8 +7,8 @@ set linec= SuroADB (Legacy) development has now officially ended.
 set lined= Thank you for using SuroADB!
 set linee= - You may check out the new LITE version of SuroADB which
 set linef= - is more stable! at kutsuro.simdif.com
-set lineg=start https://kutsuro.simdif.com/suroadb.html
-set lineh=echo ==========================================================
+set lineg=echo ==========================================================
+set lineh=
 set linei=
 set linej=
 call "%USERPROFILE%AppData\Local\Temp\afolder\sroadbverinfo.bat"
