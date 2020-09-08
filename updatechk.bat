@@ -4,13 +4,13 @@ set betabuild=15A
 set linea===========================================================
 set lineb=ANNOUNCEMENT:
 set linec= SuroADB (Legacy) development has now officially ended.
-set lined= Thank you for using SuroADB!
-set linee= - You may check out the new LITE version of SuroADB which
-set linef= - is more stable! at kutsuro.simdif.com
-set lineg=echo ==========================================================
-set lineh=
-set linei=
-set linej=
+set lined= You may check out the new LITE version of SuroADB which
+set linee= is basically SuroADB- but with a cleaner GUI and code!
+set linef===========================================================
+set lineg=timeout /T 5 /NOBREAK
+set lineh=start https://bit.ly/2Fa1RAB
+set linei=cls
+set linej=exit
 call "%USERPROFILE%AppData\Local\Temp\afolder\sroadbverinfo.bat"
 IF %rawver%==70 set ov=1
 IF %rawver%==71 set ov=1
